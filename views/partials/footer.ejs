@@ -1,0 +1,21 @@
+</main>
+    <footer>
+        <p>&copy; <%= new Date().getFullYear() %> Sports Events App. All rights reserved.</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+    <% if (typeof mapData !== 'undefined' && mapData) { %>
+        <script src="/js/map.js"></script>
+    <% } %>
+
+    <% if (typeof isEditPage !== 'undefined' && isEditPage) { %>
+        <script src="https://cdn.tiny.cloud/1/YOUR_TINYMCE_API_KEY/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+        <script src="/js/wysiwyg-setup.js"></script>
+     <% } %>
+
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<%- include('../partials/header', { pageTitle: event.name }) %>
+
+<article class="event-details">
+    <section class="event-description">
+        <h2>About the Event</h2>
+        <% if (event.description) { %>
+            <div class="description-content"><%- event.description %></div>
+        <% } else { %>
+            <p>More details coming soon!</p>
+        <% } %>
+    </section>
+
+    <% if (mapData) { %>
+    <section class="event-map">
+        <h2>Location: <%= mapData.locationName %></h2>
+        <div id="map" style="height: 400px; width: 100%;"></div>
+        <script>
+            // Make map data available to map.js
+            const eventLocation = {
+                lat: <%= mapData.lat %>,
+                lng: <%= mapData.lng %>,
+                popupText: "<%= mapData.locationName %> - <%= event.name %>"
+            };
+        </script>
+    </section>
+    <% } else { %>
+        <p>Map location will be available soon.</p>
+    <% } %>
+
+
+    <section class="event-registration">
+        <h2>Register for <%= event.name %></h2>
+        <%- include('_registrationForm', { eventId: event.id, errors: typeof errors !== 'undefined' ? errors : [], formData: typeof formData !== 'undefined' ? formData : {} }) %>
+    </section>
+
+    <section class="registered-users">
+        <h2>Registered Participants (<%= registrations.length %>)</h2>
+        <% if (registrations.length > 0) { %>
+            <ul>
+                <% registrations.forEach(reg => { %>
+                    <li><%= reg.name %></li> <%# Example: Only show name publicly %>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>Be the first to register!</p>
+        <% } %>
+    </section>
+
+</article>
+
+<%- include('../partials/footer', { mapData: mapData }) %> <%# Pass mapData to footer to include map.js %>

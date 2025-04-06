@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle %> | Sports Events</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+     </head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/events/triathlon">Triathlon (Aug)</a></li>
+                <li><a href="/events/cycling">Cycling (Sep)</a></li>
+                <li><a href="/events/swimming">Swimming (Jun)</a></li>
+                 <% if (isAuthenticated) { %>
+                    <li><a href="/admin/dashboard">Admin Dashboard</a></li>
+                    <li><a href="/admin/logout">Logout</a></li>
+                 <% } else { %>
+                    <li><a href="/admin/login">Admin Login</a></li>
+                 <% } %>
+            </ul>
+        </nav>
+        <h1><%= pageTitle %></h1>
+        <% /* if (messages.error) { %>
+            <div class="message error"><%= messages.error %></div>
+        <% } */ %>
+        <% /* if (messages.success) { %>
+            <div class="message success"><%= messages.success %></div>
+        <% } */ %>
+    </header>
+    <main>

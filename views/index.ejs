@@ -1,0 +1,25 @@
+<%- include('partials/header', { pageTitle: pageTitle }) %>
+
+<section class="event-links">
+    <h2>Our Annual Events</h2>
+    <% if (events.length > 0) { %>
+        <div class="event-grid">
+            <% events.forEach(event => { %>
+                <div class="event-card">
+                    <a href="/events/<%= event.slug %>">
+                        <% if (event.imageUrl) { %>
+                            <img src="<%= event.imageUrl %>" alt="<%= event.name %>" loading="lazy">
+                        <% } else { %>
+                             <img src="/images/placeholder.png" alt="<%= event.name %>" loading="lazy"> <% } %>
+                        <h3><%= event.name %></h3>
+                        <p>(<%= event.month %>)</p>
+                    </a>
+                </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <p>No events found. Check back later!</p>
+    <% } %>
+</section>
+
+<%- include('partials/footer') %>

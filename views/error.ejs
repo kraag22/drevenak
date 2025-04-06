@@ -1,0 +1,18 @@
+<%- include('partials/header', { pageTitle: 'Error' }) %>
+
+<div style="padding: 20px; border: 1px solid red; background-color: #ffebee; color: #c62828; border-radius: 5px;">
+    <h2>An Error Occurred</h2>
+    <p><%= message %></p>
+
+    <%# Only show stack trace in development environment %>
+    <% if (process.env.NODE_ENV !== 'production' && error && error.stack) { %>
+        <details style="margin-top: 15px; background: #fff; padding: 10px; border-radius: 3px;">
+            <summary>Error Details (Development Mode)</summary>
+            <pre style="white-space: pre-wrap; word-wrap: break-word; font-size: 0.8em; margin-top: 10px;"><%= error.stack %></pre>
+        </details>
+    <% } %>
+
+     <p style="margin-top: 20px;"><a href="/" class="btn">Return to Homepage</a></p>
+</div>
+
+<%- include('partials/footer') %>

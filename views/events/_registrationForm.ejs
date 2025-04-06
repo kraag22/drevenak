@@ -1,0 +1,52 @@
+<%# Display general form errors (e.g., duplicate email) %>
+<% if (errors && errors.length > 0 && !errors.find(e => e.path)) { %>
+    <div class="form-errors">
+        <ul>
+            <% errors.filter(e => !e.path).forEach(error => { %>
+                <li><%= error.msg %></li>
+            <% }); %>
+        </ul>
+    </div>
+<% } %>
+
+
+<form action="/register/<%= eventId %>" method="POST">
+    <% function getError(field) { return errors.find(e => e.path === field); } %>
+    <% function getValue(field) { return formData && formData[field] ? formData[field] : ''; } %>
+
+    <div class="form-group">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" required value="<%= getValue('name') %>">
+        <% const nameError = getError('name'); %>
+        <% if (nameError) { %><span class="error-text"><%= nameError.msg %></span><% } %>
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required value="<%= getValue('email') %>">
+         <% const emailError = getError('email'); %>
+        <% if (emailError) { %><span class="error-text"><%= emailError.msg %></span><% } %>
+    </div>
+
+    <div class="form-group">
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required value="<%= getValue('dob') %>">
+         <% const dobError = getError('dob'); %>
+        <% if (dobError) { %><span class="error-text"><%= dobError.msg %></span><% } %>
+    </div>
+
+    <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="" disabled <%= !getValue('gender') ? 'selected' : '' %>>-- Select Gender --</option>
+            <option value="Male" <%= getValue('gender') === 'Male' ? 'selected' : '' %>>Male</option>
+            <option value="Female" <%= getValue('gender') === 'Female' ? 'selected' : '' %>>Female</option>
+            <option value="Other" <%= getValue('gender') === 'Other' ? 'selected' : '' %>>Other</option>
+            <option value="Prefer not to say" <%= getValue('gender') === 'Prefer not to say' ? 'selected' : '' %>>Prefer not to say</option>
+        </select>
+         <% const genderError = getError('gender'); %>
+        <% if (genderError) { %><span class="error-text"><%= genderError.msg %></span><% } %>
+    </div>
+
+    <button type="submit" class="btn">Register</button>
+</form>

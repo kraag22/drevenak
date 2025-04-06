@@ -1,0 +1,21 @@
+<%- include('../partials/header', { pageTitle: 'Admin Dashboard' }) %>
+
+<h2>Welcome, Admin!</h2>
+
+<div class="dashboard-summary">
+    <p>Here's a quick overview:</p>
+    <ul>
+        <li>Total Events Managed: <strong><%= eventCount %></strong></li>
+        </ul>
+</div>
+
+<div class="admin-actions">
+    <h3>Quick Actions</h3>
+    <ul>
+        <li><a href="/admin/events" class="btn">Manage Events</a></li>
+        <li><a href="/admin/events/new" class="btn btn-secondary">Create New Event</a></li>
+        </ul>
+</div>
+
+
+<%- include('../partials/footer') %>

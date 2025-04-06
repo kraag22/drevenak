@@ -1,0 +1,274 @@
+/* Basic Reset / Defaults */
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+a {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1, h2, h3 {
+    color: #17a2b8; /* A slightly different color for headings */
+}
+
+/* Layout */
+header {
+    background: #333;
+    color: #fff;
+    padding: 1rem 0;
+    border-bottom: #0056b3 3px solid;
+}
+
+header nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+header nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+header nav ul li a {
+    color: #fff;
+}
+
+header h1 {
+    text-align: center;
+    margin-top: 0.5rem;
+    color: #fff;
+}
+
+
+main {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    min-height: 60vh; /* Ensure main content pushes footer down */
+}
+
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #333;
+    color: #fff;
+}
+
+/* Homepage Event Links */
+.event-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.event-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden; /* Keep image corners rounded */
+    background: #fff;
+    transition: transform 0.2s ease-in-out;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.event-card a {
+    display: block;
+    color: #333;
+}
+
+.event-card img {
+    width: 100%;
+    height: 180px; /* Fixed height for consistency */
+    object-fit: cover; /* Cover the area without distortion */
+    display: block;
+}
+
+.event-card h3 {
+    margin: 0.5rem 1rem;
+    color: #0056b3;
+}
+
+.event-card p {
+    margin: 0 1rem 0.5rem;
+    font-size: 0.9em;
+    color: #555;
+}
+
+
+/* Event Details Page */
+.event-details section {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+.event-details section:last-child {
+    border-bottom: none;
+}
+
+.description-content p,
+.description-content ul,
+.description-content ol {
+    margin-bottom: 1em;
+}
+/* Add more specific styles for WYSIWYG content as needed */
+
+
+#map {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.form-group textarea {
+    resize: vertical; /* Allow vertical resizing */
+}
+
+.btn, button[type="submit"] {
+    display: inline-block;
+    background: #0056b3;
+    color: #fff;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover, button[type="submit"]:hover {
+    background: #004494;
+}
+
+.btn-secondary {
+    background: #6c757d;
+}
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+/* Error Messages */
+.error-text {
+    color: #dc3545;
+    font-size: 0.85em;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.form-errors, .message.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+}
+.form-errors ul {
+    margin-bottom: 0;
+    padding-left: 1.2rem;
+}
+
+/* Success Messages */
+.message.success {
+     color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+     padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+}
+
+
+/* Admin Specific */
+.admin-form {
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+/* Registered Users List */
+.registered-users ul {
+    list-style: none;
+    padding: 0;
+}
+.registered-users li {
+    padding: 0.3rem 0;
+    border-bottom: 1px dotted #eee;
+}
+.registered-users li:last-child {
+    border-bottom: none;
+}
+
+/* Basic Admin Table Styling */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.admin-table th,
+.admin-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.admin-table th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+.admin-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.admin-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.admin-table td a {
+    margin-right: 5px;
+}

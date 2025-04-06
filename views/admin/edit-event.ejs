@@ -1,0 +1,69 @@
+<%- include('../partials/header', { pageTitle: pageTitle }) %>
+
+<div class="admin-form">
+    <h2><%= pageTitle %></h2>
+
+     <%# Display validation errors %>
+     <% if (errors && errors.length > 0) { %>
+        <div class="form-errors">
+            <p>Please fix the following errors:</p>
+            <ul>
+                <% errors.forEach(error => { %>
+                    <li><%= error.msg %></li>
+                <% }); %>
+            </ul>
+        </div>
+    <% } %>
+
+
+    <form action="/admin/events/edit/<%= event.id %>" method="POST">
+         <% function getValue(field) { return event && event[field] ? event[field] : ''; } %>
+
+         <div class="form-group">
+            <label for="name">Event Name:</label>
+            <input type="text" id="name" name="name" required value="<%= getValue('name') %>">
+        </div>
+
+         <div class="form-group">
+            <label for="month">Month:</label>
+            <select id="month" name="month" required>
+                 <option value="June" <%= getValue('month') === 'June' ? 'selected' : '' %>>June</option>
+                 <option value="August" <%= getValue('month') === 'August' ? 'selected' : '' %>>August</option>
+                 <option value="September" <%= getValue('month') === 'September' ? 'selected' : '' %>>September</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="locationName">Location Name:</label>
+            <input type="text" id="locationName" name="locationName" value="<%= getValue('locationName') %>">
+        </div>
+
+        <div class="form-group">
+            <label for="latitude">Latitude:</label>
+            <input type="number" step="any" id="latitude" name="latitude" value="<%= getValue('latitude') %>">
+        </div>
+
+         <div class="form-group">
+            <label for="longitude">Longitude:</label>
+            <input type="number" step="any" id="longitude" name="longitude" value="<%= getValue('longitude') %>">
+        </div>
+
+         <div class="form-group">
+            <label for="imageUrl">Image URL (e.g., /images/triathlon.jpg):</label>
+            <input type="text" id="imageUrl" name="imageUrl" value="<%= getValue('imageUrl') %>">
+        </div>
+
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="10"><%= getValue('description') %></textarea>
+            <small>Use the editor controls for formatting.</small>
+        </div>
+
+        <button type="submit" class="btn">Save Changes</button>
+        <a href="/admin/events" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<%# Pass flag to footer to include WYSIWYG JS %>
+<%- include('../partials/footer', { isEditPage: true }) %>

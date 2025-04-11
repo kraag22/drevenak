@@ -31,17 +31,18 @@ function sanitizeDescription(dirtyHtml) {
 exports.showLogin = (req, res) => {
     res.render('admin/login', {
         pageTitle: 'Admin Login',
-        error: req.flash ? req.flash('error') : null // Pass flash errors if using connect-flash
     });
 };
 
 // GET /admin/dashboard
 exports.showDashboard = async (req, res, next) => {
     try {
+        const events = await Event.findAll({ order: [['name', 'ASC']] });
         const eventCount = await Event.count();
         // Add more dashboard data as needed
         res.render('admin/dashboard', { // Create views/admin/dashboard.ejs
             pageTitle: 'Admin Dashboard',
+            events: events,
             eventCount: eventCount
         });
     } catch (error) {
@@ -54,7 +55,7 @@ exports.listEvents = async (req, res, next) => {
     try {
         const events = await Event.findAll({ order: [['name', 'ASC']] });
         res.render('admin/list-events', { // Create views/admin/list-events.ejs
-            pageTitle: 'Manage Events',
+            pageTitle: 'Spravovat události',
             events: events
         });
     } catch (error) {
@@ -63,10 +64,13 @@ exports.listEvents = async (req, res, next) => {
 };
 
 // GET /admin/events/new
-exports.showNewEventForm = (req, res) => {
+exports.showNewEventForm = async (req, res) => {
+    const events = await Event.findAll({ order: [['name', 'ASC']] });
+
     res.render('admin/new-event', { // Create views/admin/new-event.ejs
-        pageTitle: 'Create New Event',
+        pageTitle: 'Vytvoř novou událost',
         event: {}, // Pass empty object for form consistency
+        events: events,
         errors: []
     });
 };
@@ -109,6 +113,7 @@ exports.createEvent = async (req, res, next) => {
 // GET /admin/events/edit/:eventId
 exports.showEditEventForm = async (req, res, next) => {
     try {
+        const events = await Event.findAll({ order: [['name', 'ASC']] });
         const eventId = req.params.eventId;
         const event = await Event.findByPk(eventId);
         if (!event) {
@@ -120,6 +125,8 @@ exports.showEditEventForm = async (req, res, next) => {
         res.render('admin/edit-event', {
             pageTitle: `Edit: ${event.name}`,
             event: event,
+            events: events,
+            tinymce_key: process.env.TINYMCE_KEY,
             errors: []
         });
     } catch (error) {

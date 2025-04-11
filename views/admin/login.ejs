@@ -3,12 +3,17 @@
 <div class="admin-form">
     <h2>Admin Login</h2>
 
-    <%# Display login error messages from passport/flash %>
-    <% if (error && error.length > 0) { %>
+    <%# Display Passport's 'error' flash message %>
+    <% if (error && error.length > 0) { %> <%# This now checks res.locals.error %>
         <div class="message error"><%= error %></div>
     <% } %>
-    <% if (locals.error_msg && locals.error_msg.length > 0) { %> <%# Alternative flash message check %>
-        <div class="message error"><%= locals.error_msg %></div>
+
+    <%# You can also display other flash message types if needed %>
+    <% if (error_msg && error_msg.length > 0) { %>
+        <div class="message error"><%= error_msg %></div>
+    <% } %>
+    <% if (success_msg && success_msg.length > 0) { %>
+        <div class="message success"><%= success_msg %></div>
     <% } %>
 
 

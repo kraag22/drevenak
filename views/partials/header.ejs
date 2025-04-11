@@ -14,15 +14,17 @@
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/events/triathlon">Triathlon (Aug)</a></li>
-                <li><a href="/events/cycling">Cycling (Sep)</a></li>
-                <li><a href="/events/swimming">Swimming (Jun)</a></li>
-                 <% if (isAuthenticated) { %>
+
+                <% events.forEach(event=> { %>
+                    <li><a href="/events/<%= event.slug %>"><%= event.name %> (<%= event.month %>)</a></li>
+                <% }); %>
+
+                <% if (isAuthenticated) { %>
                     <li><a href="/admin/dashboard">Admin Dashboard</a></li>
                     <li><a href="/admin/logout">Logout</a></li>
-                 <% } else { %>
+                <% } else { %>
                     <li><a href="/admin/login">Admin Login</a></li>
-                 <% } %>
+                <% } %>
             </ul>
         </nav>
         <h1><%= pageTitle %></h1>

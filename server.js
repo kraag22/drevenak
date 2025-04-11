@@ -55,22 +55,19 @@ app.use(
 );
 // sessionStore.sync(); // Sync the session table (can be done below with main sync)
 
-app.use(flash());
-
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Make flash messages available in views (optional)
-app.use(function(req, res, next) {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  res.locals.error = req.flash('error'); // for passport errors
-  next();
-});
+app.use(flash());
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated();
   res.locals.currentUser = req.user;
+  // Make flash messages available in all views under 'messages'
+  res.locals.success_msg = req.flash('success_msg'); // Example success message key
+  res.locals.error_msg = req.flash('error_msg');   // Example error message key
+  // Passport's failureFlash uses 'error' by default
+  res.locals.error = req.flash('error');
   next();
 });
 

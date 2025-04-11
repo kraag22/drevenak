@@ -2,6 +2,11 @@ const { Event, Registration } = require('../models'); // Use index import
 
 exports.showEvent = async (req, res, next) => {
   try {
+    const events = await Event.findAll({
+            attributes: ['id', 'name', 'slug', 'month', 'imageUrl'], // Select only needed fields
+            order: [['id', 'ASC']] // Or order by month/date if needed
+        });
+
     const eventSlug = req.params.eventSlug;
     const event = await Event.findOne({
         where: { slug: eventSlug },
@@ -29,6 +34,7 @@ exports.showEvent = async (req, res, next) => {
     res.render('events/show', {
       pageTitle: event.name,
       event: event,
+      events: events,
       registrations: event.registrations, // Access eager-loaded registrations
       mapData: mapData // Pass coordinates to the view
     });

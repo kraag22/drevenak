@@ -49,8 +49,18 @@
         </div>
 
          <div class="form-group">
-            <label for="imageUrl">Image URL (e.g., /images/triathlon.jpg):</label>
-            <input type="text" id="imageUrl" name="imageUrl" value="<%= getValue('imageUrl') %>">
+            <label for="imageUrl">Event Image (Optional):</label>
+            <select id="imageUrl" name="imageUrl">
+                 <option value="">-- None --</option> <%# Allow deselecting %>
+                 <% if (typeof images !== 'undefined' && images.length > 0) { %>
+                    <% images.forEach(image => { %>
+                        <option value="<%= image.path %>" <%= (event.imageUrl === image.path) ? 'selected' : '' %>>
+                            <%= image.label %>
+                        </option>
+                    <% }); %>
+                 <% } %>
+            </select>
+             <small>Select an image previously uploaded via Manage Images.</small>
         </div>
 
 

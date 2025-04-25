@@ -1,6 +1,8 @@
-<%- include('../partials/header', { pageTitle: event.name }) %>
+<%- include('../partials/header', { pageTitle: event.name, currentPage: 'details' }) %>
 
 <article class="event-details">
+    <%- include('../partials/_eventSubnav', { event: event}) %>
+
     <section class="event-description">
         <h2>About the Event</h2>
         <% if (event.description) { %>
@@ -26,26 +28,6 @@
     <% } else { %>
         <p>Map location will be available soon.</p>
     <% } %>
-
-
-    <section class="event-registration">
-        <h2>Register for <%= event.name %></h2>
-        <%- include('_registrationForm', { eventId: event.id, errors: typeof errors !== 'undefined' ? errors : [], formData: typeof formData !== 'undefined' ? formData : {} }) %>
-    </section>
-
-    <section class="registered-users">
-        <h2>Registered Participants (<%= registrations.length %>)</h2>
-        <% if (registrations.length > 0) { %>
-            <ul>
-                <% registrations.forEach(reg => { %>
-                    <li><%= reg.name %></li> <%# Example: Only show name publicly %>
-                <% }); %>
-            </ul>
-        <% } else { %>
-            <p>Be the first to register!</p>
-        <% } %>
-    </section>
-
 </article>
 
-<%- include('../partials/footer', { mapData: mapData }) %> <%# Pass mapData to footer to include map.js %>
+<%- include('../partials/footer', { mapData: mapData }) %>

@@ -1,0 +1,12 @@
+<%- include('../partials/header', { pageTitle: event.name, currentPage: 'register' }) %>
+
+<article class="event-details">
+    <%- include('../partials/_eventSubnav', { event: event }) %>
+
+    <section class="event-registration">
+        <h2>Register for <%= event.name %></h2>
+        <%- include('_registrationForm', { eventId: event.id, errors: typeof errors !== 'undefined' ? errors : [], formData: typeof formData !== 'undefined' ? formData : {} }) %>
+    </section>
+</article>
+
+<%- include('../partials/footer') %>

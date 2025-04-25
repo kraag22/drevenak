@@ -1,0 +1,20 @@
+<%- include('../partials/header', { pageTitle: event.name }) %>
+
+<article class="event-details">
+    <%- include('../partials/_eventSubnav', { event: event, currentPage: currentPage }) %>
+
+    <section class="registered-users">
+        <h2>Registered Participants (<%= registrations.length %>)</h2>
+        <% if (registrations.length > 0) { %>
+            <ul class="participants-list">
+                <% registrations.forEach(reg => { %>
+                    <li><%= reg.name %></li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>Be the first to register!</p>
+        <% } %>
+    </section>
+</article>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,7 @@
+<nav class="event-subnav">
+    <ul>
+        <li><a href="/events/<%= event.slug %>" class="<%= currentPage === 'details' ? 'active' : '' %>">Description</a></li>
+        <li><a href="/events/<%= event.slug %>/register" class="<%= currentPage === 'register' ? 'active' : '' %>">Register</a></li>
+        <li><a href="/events/<%= event.slug %>/participants" class="<%= currentPage === 'participants' ? 'active' : '' %>">Participants</a></li>
+    </ul>
+</nav>

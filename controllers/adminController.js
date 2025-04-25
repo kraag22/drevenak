@@ -28,8 +28,10 @@ function sanitizeDescription(dirtyHtml) {
 
 
 // GET /admin/login
-exports.showLogin = (req, res) => {
+exports.showLogin = async (req, res) =>  {
+    const events = await Event.findAll({ order: [['name', 'ASC']] });
     res.render('admin/login', {
+        events: events,
         pageTitle: 'Admin Login',
     });
 };
@@ -71,6 +73,7 @@ exports.showNewEventForm = async (req, res) => {
         pageTitle: 'Vytvoř novou událost',
         event: {}, // Pass empty object for form consistency
         events: events,
+        tinymce_key: process.env.TINYMCE_KEY,
         errors: []
     });
 };

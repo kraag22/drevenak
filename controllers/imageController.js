@@ -97,6 +97,7 @@ exports.uploadImage = async (req, res, next) => {
       thumbnailFilename: uniqueThumbnailFilename,
       path: PUBLIC_IMAGE_PATH + uniqueFilename,
       thumbnailPath: PUBLIC_THUMBNAIL_PATH + uniqueThumbnailFilename,
+      label: req.body.label,
     });
 
     console.log('Image saved to DB:', newImage);

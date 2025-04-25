@@ -36,6 +36,10 @@ Image.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    label: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     // Add other fields if needed, e.g., alt text, caption
   },
   {

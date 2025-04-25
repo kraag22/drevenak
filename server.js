@@ -47,10 +47,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-        // secure: process.env.NODE_ENV === 'production', // Enable in production with HTTPS
-        // httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 // Example: 1 day validity
-    }
+      // secure: process.env.NODE_ENV === 'production', // Enable in production with HTTPS
+      // httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24, // Example: 1 day validity
+    },
   })
 );
 // sessionStore.sync(); // Sync the session table (can be done below with main sync)
@@ -65,7 +65,7 @@ app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   // Make flash messages available in all views under 'messages'
   res.locals.success_msg = req.flash('success_msg'); // Example success message key
-  res.locals.error_msg = req.flash('error_msg');   // Example error message key
+  res.locals.error_msg = req.flash('error_msg'); // Example error message key
   // Passport's failureFlash uses 'error' by default
   res.locals.error = req.flash('error');
   next();
@@ -84,15 +84,18 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   const statusCode = err.statusCode || 500;
   res.status(statusCode).render('error', {
-        pageTitle: 'Error',
-        message: process.env.NODE_ENV === 'production' ? 'An unexpected error occurred.' : err.message,
-        error: process.env.NODE_ENV === 'production' ? {} : err
-    });
+    pageTitle: 'Error',
+    message:
+      process.env.NODE_ENV === 'production'
+        ? 'An unexpected error occurred.'
+        : err.message,
+    error: process.env.NODE_ENV === 'production' ? {} : err,
+  });
 });
 
-
 // Database Connection and Server Start
-sequelize.authenticate()
+sequelize
+  .authenticate()
   .then(() => {
     console.log('SQLite file database connection authenticated successfully.');
     // Sync models. REMOVE force:true. Use alter:true WITH CAUTION during dev if needed.
@@ -105,29 +108,36 @@ sequelize.authenticate()
     return sessionStore.sync();
   })
   .then(() => {
-    console.log('Database synchronized (tables created/verified in database.sqlite).');
+    console.log(
+      'Database synchronized (tables created/verified in database.sqlite).'
+    );
     console.log('Session table synchronized.');
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);
       console.log('NODE_ENV:', process.env.NODE_ENV);
       console.log('Using SQLite file database (persistent).');
 
-        if (process.env.NODE_ENV === 'development') {
-            Admin.findOrCreate({
-                where: { username: 'admin' },
-                defaults: { password: 'password' } // Password will be hashed by hook
-            }).then(([admin, created]) => {
-                if (created) {
-                    console.log("Default admin user 'admin' (pw: 'password') created in persistent DB.");
-                } else {
-                    // console.log("Default admin user 'admin' already exists."); // Optional log
-                }
-            }).catch(err => console.error("Error finding/creating default admin:", err));
-        }
-
+      if (process.env.NODE_ENV === 'development') {
+        Admin.findOrCreate({
+          where: { username: 'admin' },
+          defaults: { password: 'password' }, // Password will be hashed by hook
+        })
+          .then(([admin, created]) => {
+            if (created) {
+              console.log(
+                "Default admin user 'admin' (pw: 'password') created in persistent DB."
+              );
+            } else {
+              // console.log("Default admin user 'admin' already exists."); // Optional log
+            }
+          })
+          .catch((err) =>
+            console.error('Error finding/creating default admin:', err)
+          );
+      }
     });
   })
-  .catch(err => {
+  .catch((err) => {
     console.error('Unable to connect/sync the database or start server:', err);
     process.exit(1);
   });

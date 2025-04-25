@@ -1,0 +1,54 @@
+<%- include('../partials/header', { pageTitle: pageTitle }) %>
+
+<div class="admin-form">
+    <h2><%= pageTitle %></h2>
+
+    <%# Display Passport's 'error' flash message %>
+    <% if (error && error.length> 0) { %> <%# This now checks res.locals.error %>
+    <div class="message error">
+        <%= error %>
+    </div>
+    <% } %>
+
+    <%# You can also display other flash message types if needed %>
+    <% if (error_msg && error_msg.length> 0) { %>
+        <div class="message error">
+            <%= error_msg %>
+        </div>
+    <% } %>
+    <% if (success_msg && success_msg.length> 0) { %>
+        <div class="message success">
+            <%= success_msg %>
+        </div>
+    <% } %>
+
+    <% if (errors && errors.length > 0) { %>
+        <div class="form-errors">
+            <p>Please fix the following errors:</p>
+            <ul>
+                <% errors.forEach(error => { %>
+                    <li><%= error.msg %></li>
+                <% }); %>
+            </ul>
+        </div>
+    <% } %>
+
+    <form action="/admin/images" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="imageFile">Select Image:</label>
+            <input type="file" id="imageFile" name="imageFile" required accept=".jpg,.jpeg,.png,.gif">
+            <small>Max file size: 5MB. Allowed types: JPG, JPEG, PNG, GIF.</small>
+        </div>
+
+        <%# Add other fields if needed (e.g., Alt Text) %>
+        <%# <div class="form-group">
+            <label for="altText">Alt Text:</label>
+            <input type="text" id="altText" name="altText">
+        </div> %>
+
+        <button type="submit" class="btn">Upload Image</button>
+        <a href="/admin/images" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,7 +1,9 @@
 # Dependencies
 node_modules/
+tmp_uploads/
+public/uploads/
 
-# Logs
+# Log
 logs
 *.log
 npm-debug.log*

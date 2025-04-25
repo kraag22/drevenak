@@ -9,9 +9,8 @@
         <thead>
             <tr>
                 <th>Thumbnail</th>
-                <th>Original Name</th>
-                <th>Filename</th>
                 <th>Label</th>
+                <th>Filename</th>
                 <th>Uploaded</th>
                 <th>Actions</th>
             </tr>
@@ -24,9 +23,8 @@
                             <img src="<%= image.thumbnailPath %>" alt="<%= image.originalName %>" width="50" height="50" style="object-fit: cover;">
                         </a>
                     </td>
-                    <td><%= image.originalName %></td>
-                    <td><%= image.filename %></td>
                     <td><%= image.label %></td>
+                    <td><%= uploadUrl + image.filename %></td>
                     <td><%= new Date(image.createdAt).toLocaleDateString() %></td>
                     <td>
                          <a href="<%= image.path %>" target="_blank" class="btn btn-sm btn-secondary">View</a>

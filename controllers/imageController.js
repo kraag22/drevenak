@@ -38,6 +38,7 @@ exports.listImages = async (req, res, next) => {
     res.render('admin/manage-images', {
       pageTitle: 'Manage Images',
       images: images,
+      uploadUrl: PUBLIC_IMAGE_PATH,
       layout: 'layouts/admin', // Assuming an admin layout
     });
   } catch (error) {

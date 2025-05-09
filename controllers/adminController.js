@@ -276,6 +276,34 @@ exports.toggleRegistrationPaidStatus = async (req, res, next) => {
   }
 };
 
+// POST /admin/registrations/:registrationId/delete
+exports.deleteRegistration = async (req, res, next) => {
+  try {
+    const registrationId = req.params.registrationId;
+    const registration = await Registration.findByPk(registrationId);
+
+    if (!registration) {
+      req.flash('error_msg', 'Registration not found.');
+      return res.redirect(req.headers.referer || '/admin/events');
+    }
+
+    const eventId = registration.eventId; // Store eventId for redirect before destroying
+    await registration.destroy();
+
+    req.flash('success_msg', 'Registration deleted successfully.');
+    // Redirect back to the registrations list for the specific event
+    res.redirect(
+      req.headers.referer || `/admin/events/${eventId}/registrations`
+    );
+  } catch (error) {
+    console.error('Error deleting registration:', error);
+    req.flash('error_msg', 'Error deleting registration.');
+    // Redirect back to the last page or a default error page/admin page
+    res.redirect(req.headers.referer || '/admin/events');
+    // next(error); // Or pass to a more generic error handler
+  }
+};
+
 // --- Simple Admin User Creation Controllers (REMOVE or SECURE for Production) ---
 exports.showAdminSetup = (req, res) => {
   // Only show if NO admins exist? Add logic check here if desired.

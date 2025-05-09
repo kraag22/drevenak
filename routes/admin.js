@@ -114,6 +114,13 @@ router.post(
   adminController.toggleRegistrationPaidStatus
 );
 
+// Route to delete a registration
+router.post(
+  '/registrations/:registrationId/delete',
+  ensureAuthenticated,
+  adminController.deleteRegistration
+);
+
 // Image Management Routes
 router.get('/images', ensureAuthenticated, imageController.listImages);
 router.get('/images/new', ensureAuthenticated, imageController.showUploadForm);

@@ -92,7 +92,7 @@ exports.createEvent = async (req, res, next) => {
   try {
     const {
       name,
-      month,
+      eventDate,
       locationName,
       latitude,
       longitude,
@@ -111,7 +111,7 @@ exports.createEvent = async (req, res, next) => {
     await Event.create({
       name,
       slug, // Save the generated slug
-      month,
+      eventDate,
       locationName,
       latitude: latitude || null,
       longitude: longitude || null,
@@ -168,7 +168,7 @@ exports.updateEventDescription = async (req, res, next) => {
   const {
     description,
     name,
-    month,
+    eventDate,
     locationName,
     latitude,
     longitude,
@@ -188,7 +188,7 @@ exports.updateEventDescription = async (req, res, next) => {
 
     // Update other fields as needed
     event.name = name;
-    event.month = month;
+    event.eventDate = eventDate;
     event.locationName = locationName;
     event.latitude = latitude || null;
     event.longitude = longitude || null;
@@ -207,6 +207,7 @@ exports.updateEventDescription = async (req, res, next) => {
     res.status(422).render('admin/edit-event', {
       pageTitle: `Edit Event`, // Might not have event name if findByPk failed earlier
       event: { ...req.body, id: eventId }, // Repopulate form with submitted data
+      tinymce_key: process.env.TINYMCE_KEY,
       errors: error.errors
         ? error.errors.map((e) => ({ msg: e.message }))
         : [{ msg: 'Could not update event.' }],

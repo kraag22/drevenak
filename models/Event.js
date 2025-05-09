@@ -25,7 +25,7 @@ Event.init(
       type: DataTypes.TEXT,
       allowNull: true, // Allow empty description initially
     },
-    month: {
+    eventDate: {
       type: DataTypes.DATE,
       allowNull: true,
     },

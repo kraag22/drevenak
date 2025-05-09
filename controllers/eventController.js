@@ -3,8 +3,8 @@ const { Event, Registration } = require('../models'); // Use index import
 exports.showEvent = async (req, res, next) => {
   try {
     const events = await Event.findAll({
-      attributes: ['id', 'name', 'slug', 'month', 'imageUrl'], // Select only needed fields
-      order: [['id', 'ASC']], // Or order by month/date if needed
+      attributes: ['id', 'name', 'slug', 'eventDate', 'imageUrl'],
+      order: [['name', 'ASC']],
     });
 
     const eventSlug = req.params.eventSlug;
@@ -52,8 +52,8 @@ exports.showEvent = async (req, res, next) => {
 exports.showRegistrationForm = async (req, res, next) => {
   try {
     const allEvents = await Event.findAll({
-      attributes: ['id', 'name', 'slug', 'month', 'imageUrl'], // Select only needed fields
-      order: [['id', 'ASC']], // Or order by month/date if needed
+      attributes: ['id', 'name', 'slug', 'eventDate', 'imageUrl'],
+      order: [['name', 'ASC']],
     });
 
     const eventSlug = req.params.eventSlug;
@@ -81,8 +81,8 @@ exports.showRegistrationForm = async (req, res, next) => {
 exports.showParticipants = async (req, res, next) => {
   try {
     const allEvents = await Event.findAll({
-      attributes: ['id', 'name', 'slug', 'month', 'imageUrl'],
-      order: [['id', 'ASC']],
+      attributes: ['id', 'name', 'slug', 'eventDate', 'imageUrl'],
+      order: [['name', 'ASC']],
     });
 
     const eventSlug = req.params.eventSlug;

@@ -1,0 +1,49 @@
+<%- include('../partials/header', { pageTitle: pageTitle }) %>
+
+<h2><%= pageTitle %></h2>
+
+<% if (event) { %>
+    <h3>Registrations for: <%= event.name %></h3>
+    <p><a href="/admin/events" class="btn btn-secondary">Back to Events List</a></p>
+
+    <% if (registrations && registrations.length > 0) { %>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Date of Birth</th>
+                    <th>Gender</th>
+                    <th>Registered At</th>
+                    <th>Paid</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% registrations.forEach(reg => { %>
+                    <tr>
+                        <td><%= reg.name %></td>
+                        <td><%= reg.email %></td>
+                        <td><%= new Date(reg.dob).toLocaleDateString() %></td>
+                        <td><%= reg.gender %></td>
+                        <td><%= new Date(reg.createdAt).toLocaleString() %></td>
+                        <td><%= reg.paid ? 'Yes' : 'No' %></td>
+                        <td>
+                            <form action="/admin/registrations/<%= reg.id %>/toggle-paid" method="POST" style="display: inline;">
+                                <button type="submit" class="btn btn-sm <%= reg.paid ? 'btn-warning' : 'btn-success' %>">
+                                    <%= reg.paid ? 'Mark Unpaid' : 'Mark Paid' %>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No users have registered for this event yet.</p>
+    <% } %>
+<% } else { %>
+    <p>Event not found.</p>
+<% } %>
+
+<%- include('../partials/footer') %>

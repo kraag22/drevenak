@@ -100,6 +100,20 @@ router.post(
   adminController.updateEventDescription
 );
 
+// Route to list registrations for a specific event
+router.get(
+  '/events/:eventId/registrations',
+  ensureAuthenticated,
+  adminController.listEventRegistrations
+);
+
+// Route to toggle paid status of a registration
+router.post(
+  '/registrations/:registrationId/toggle-paid',
+  ensureAuthenticated,
+  adminController.toggleRegistrationPaidStatus
+);
+
 // Image Management Routes
 router.get('/images', ensureAuthenticated, imageController.listImages);
 router.get('/images/new', ensureAuthenticated, imageController.showUploadForm);

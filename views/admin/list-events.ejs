@@ -22,7 +22,8 @@
                     <td>
                         <a href="/admin/events/edit/<%= event.id %>" class="btn btn-sm">Edit</a>
                         <a href="/events/<%= event.slug %>" target="_blank" class="btn btn-sm btn-secondary">View</a>
-                        </td>
+                        <a href="/admin/events/<%= event.id %>/registrations" class="btn btn-sm btn-info">Registered Users</a>
+                    </td>
                 </tr>
             <% }); %>
         </tbody>

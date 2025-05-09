@@ -1,4 +1,4 @@
-const { Event, Admin, Image } = require('../models');
+const { Event, Admin, Image, Registration } = require('../models');
 const bcrypt = require('bcrypt');
 
 // IMPORTANT: Add input sanitization library for WYSIWYG content
@@ -212,6 +212,66 @@ exports.updateEventDescription = async (req, res, next) => {
         : [{ msg: 'Could not update event.' }],
     });
     // next(error);
+  }
+};
+
+// GET /admin/events/:eventId/registrations
+exports.listEventRegistrations = async (req, res, next) => {
+  try {
+    const eventId = req.params.eventId;
+    const event = await Event.findByPk(eventId, {
+      include: {
+        model: Registration,
+        as: 'registrations',
+        order: [['createdAt', 'DESC']],
+      },
+    });
+
+    if (!event) {
+      const error = new Error('Event not found');
+      error.statusCode = 404;
+      return next(error);
+    }
+    const events = await Event.findAll({ order: [['name', 'ASC']] });
+
+    res.render('admin/event-registrations', {
+      pageTitle: `Registrations for ${event.name}`,
+      event: event,
+      registrations: event.registrations,
+      events: events, // for header
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// POST /admin/registrations/:registrationId/toggle-paid
+exports.toggleRegistrationPaidStatus = async (req, res, next) => {
+  try {
+    const registrationId = req.params.registrationId;
+    const registration = await Registration.findByPk(registrationId);
+
+    if (!registration) {
+      req.flash('error_msg', 'Registration not found.');
+      // Redirect back to the last known page or a default admin page
+      return res.redirect(req.headers.referer || '/admin/events');
+    }
+
+    registration.paid = !registration.paid; // Toggle the paid status
+    await registration.save();
+
+    req.flash(
+      'success_msg',
+      `Registration marked as ${registration.paid ? 'paid' : 'unpaid'}.`
+    );
+    res.redirect(
+      req.headers.referer ||
+        `/admin/events/${registration.eventId}/registrations`
+    );
+  } catch (error) {
+    console.error('Error toggling registration paid status:', error);
+    req.flash('error_msg', 'Error updating registration status.');
+    next(error); // Or redirect back with error
   }
 };
 

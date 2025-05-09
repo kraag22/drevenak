@@ -274,3 +274,12 @@ footer {
 .admin-table td a {
     margin-right: 5px;
 }
+
+.action-row {
+    display: flex;
+    margin: 10px;
+}
+
+.action-cell {
+    margin-right: 10px;
+}

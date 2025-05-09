@@ -8,7 +8,7 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Month</th>
+                <th>Event Date</th>
                 <th>Location</th>
                 <th>Actions</th>
             </tr>
@@ -17,7 +17,7 @@
             <% events.forEach(event => { %>
                 <tr>
                     <td><%= event.name %></td>
-                    <td><%= event.month %></td>
+                    <td><%= event.month ? new Date(event.month).toLocaleString() : 'N/A' %></td>
                     <td><%= event.locationName || 'N/A' %></td>
                     <td>
                         <a href="/admin/events/edit/<%= event.id %>" class="btn btn-sm">Edit</a>

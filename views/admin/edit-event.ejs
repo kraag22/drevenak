@@ -25,12 +25,8 @@
         </div>
 
          <div class="form-group">
-            <label for="month">Month:</label>
-            <select id="month" name="month" required>
-                 <option value="June" <%= getValue('month') === 'June' ? 'selected' : '' %>>June</option>
-                 <option value="August" <%= getValue('month') === 'August' ? 'selected' : '' %>>August</option>
-                 <option value="September" <%= getValue('month') === 'September' ? 'selected' : '' %>>September</option>
-            </select>
+            <label for="month">Event Date and Time:</label>
+            <input type="datetime-local" id="month" name="month" value="<%= event.month ? new Date(event.month).toISOString().substring(0, 16) : '' %>">
         </div>
 
         <div class="form-group">

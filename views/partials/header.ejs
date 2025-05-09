@@ -17,7 +17,7 @@
 
                 <% if (typeof events !== 'undefined' && events) { %>
                     <% events.forEach(event=> { %>
-                        <li><a href="/events/<%= event.slug %>"><%= event.name %> (<%= event.month %>)</a></li>
+                        <li><a href="/events/<%= event.slug %>"><%= event.name %> (<%= event.month ? new Date(event.month).toLocaleDateString() : 'Date TBD' %>)</a></li>
                     <% }); %>
                 <% } %>
 

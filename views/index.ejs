@@ -12,7 +12,7 @@
                         <% } else { %>
                              <img src="/images/placeholder.png" alt="<%= event.name %>" loading="lazy"> <% } %>
                         <h3><%= event.name %></h3>
-                        <p>(<%= event.eventDate %>)</p>
+                        <p><%= event.eventDate ? `${new Date(event.eventDate).getDate()}.${new Date(event.eventDate).getMonth() + 1}.${new Date(event.eventDate).getFullYear()} ${new Date(event.eventDate).getHours().toString().padStart(2, '0')}:${new Date(event.eventDate).getMinutes().toString().padStart(2, '0')}` : '' %></p>
                     </a>
                 </div>
             <% }); %>

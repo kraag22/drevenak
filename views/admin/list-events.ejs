@@ -17,7 +17,7 @@
             <% events.forEach(event => { %>
                 <tr>
                     <td><%= event.name %></td>
-                    <td><%= event.eventDate ? new Date(event.eventDate).toLocaleString() : 'N/A' %></td>
+                    <td><%= event.eventDate ? `${new Date(event.eventDate).getDate()}.${new Date(event.eventDate).getMonth() + 1}.${new Date(event.eventDate).getFullYear()}` : '' %></td>
                     <td><%= event.locationName || 'N/A' %></td>
                     <td>
                         <a href="/admin/events/edit/<%= event.id %>" class="btn btn-sm">Edit</a>

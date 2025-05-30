@@ -7,7 +7,7 @@ if (!process.env.SESSION_SECRET) {
     console.warn('SESSION_SECRET environment variable is not set. Using a default (unsafe) value.');
 }
 
-const dbPath = path.join(__dirname, '..', 'database.sqlite'); // Place DB file in project root
+const dbPath = path.join(__dirname, '..', 'data', 'database.sqlite');
 
 console.log(`Using SQLite database file at: ${dbPath}`); // Log the path
 

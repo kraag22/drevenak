@@ -33,3 +33,4 @@ build/
 
 # Test coverage
 coverage/
+data/

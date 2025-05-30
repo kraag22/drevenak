@@ -39,7 +39,7 @@ jobs:
         uses: easingthemes/ssh-deploy@v4.1.10
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          ARGS: "-r --delete-after"
+          ARGS: "-r"
           SOURCE: "/"
           REMOTE_HOST: "kraag22.com"
           TARGET: "/srv/drevenak"

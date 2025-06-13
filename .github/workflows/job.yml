@@ -41,7 +41,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           ARGS: "-r"
           SOURCE: "/"
-          REMOTE_HOST: "drevenak.kraag22.com"
+          REMOTE_HOST: "drevenak-luka.cz"
           TARGET: "/srv/drevenak"
           REMOTE_USER: "root"
           SCRIPT_AFTER: |

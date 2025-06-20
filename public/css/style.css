@@ -313,3 +313,30 @@ footer {
 .contact-block a:hover {
     text-decoration: underline;
 }
+
+.track-section {
+    margin: 2rem auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 2rem;
+    text-align: center;
+}
+
+.track-title {
+    color: #17a2b8;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+.track-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+.track-image {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-top: 1rem;
+}

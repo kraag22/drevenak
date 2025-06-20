@@ -1,0 +1,35 @@
+<%- include('../partials/header', { pageTitle: event.name, currentPage: 'details' }) %>
+
+<article class="event-details">
+    <%- include('../partials/_eventSubnav', { event: event}) %>
+
+  <section class="track-section">
+    <h2 class="track-title">Plavání</h2>
+    <div class="track-content">
+      <p>Plavání 500m</p>
+      <!-- Example image, replace src with actual image if available -->
+      <img src="/images/swim.png" alt="Plavani" class="track-image" />
+    </div>
+  </section>
+
+  <section class="track-section">
+    <h2 class="track-title">Kolo</h2>
+    <div class="track-content">
+      <p>Jízda na kole 24km - 2 kola.</p>
+      <!-- Example image, replace src with actual image if available -->
+      <img src="/images/bike.png" alt="Kolo" class="track-image" />
+    </div>
+  </section>
+
+  <section class="track-section">
+    <h2 class="track-title">Běh</h2>
+    <div class="track-content">
+      <p>Běh 5km - 2 kola.</p>
+      <!-- Example image, replace src with actual image if available -->
+      <img src="/images/run.png" alt="Beh" class="track-image" />
+    </div>
+  </section>
+
+</article>
+
+<%- include('../partials/footer', { mapData: true }) %>

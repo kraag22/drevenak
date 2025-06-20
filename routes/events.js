@@ -11,4 +11,6 @@ router.get('/:eventSlug/register', eventController.showRegistrationForm);
 // GET /events/:eventSlug/participants - Show list of participants for a specific event
 router.get('/:eventSlug/participants', eventController.showParticipants);
 
+router.get('/:eventSlug/track', eventController.showTrack);
+
 module.exports = router;

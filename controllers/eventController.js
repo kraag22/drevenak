@@ -107,3 +107,32 @@ exports.showParticipants = async (req, res, next) => {
     next(error); // Pass error to the error handling middleware
   }
 };
+
+exports.showTrack = async (req, res, next) => {
+  try {
+    const allEvents = await Event.findAll({
+      attributes: ['id', 'name', 'slug', 'eventDate', 'imageUrl'],
+      order: [['name', 'ASC']],
+    });
+
+    const eventSlug = req.params.eventSlug;
+    const event = await Event.findOne({
+      where: { slug: eventSlug },
+      include: {
+        model: Registration,
+        as: 'registrations',
+        order: [['createdAt', 'DESC']],
+      },
+    });
+
+    res.render('events/track', {
+      pageTitle: event.name,
+      event: event,
+      events: allEvents,
+      currentPage: 'track',
+    });
+  } catch (error) {
+    console.error('Error fetching event details:', error);
+    next(error); // Pass error to the error handling middleware
+  }
+};

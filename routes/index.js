@@ -12,11 +12,28 @@ router.get('/', async (req, res, next) => {
       order: [['name', 'ASC']],
     });
     res.render('index', {
-      pageTitle: 'Upcoming Sports Events',
+      pageTitle: 'Spolek Dřevěného muže',
       events: events,
     });
   } catch (error) {
     console.error('Error fetching events for homepage:', error);
+    next(error);
+  }
+});
+
+router.get('/kontakt', async (req, res, next) => {
+  try {
+    // Fetch minimal event data for the homepage links
+    const events = await Event.findAll({
+      attributes: ['id', 'name', 'slug', 'eventDate', 'imageUrl'],
+      order: [['name', 'ASC']],
+    });
+    res.render('kontakt', {
+      pageTitle: 'Kontakt',
+      events: events,
+    });
+  } catch (error) {
+    console.error('Error fetching events for contact:', error);
     next(error);
   }
 });

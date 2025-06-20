@@ -283,3 +283,33 @@ footer {
 .action-cell {
     margin-right: 10px;
 }
+
+/* Contact Page Styles */
+.contact-card {
+    max-width: 500px;
+    margin: 2rem auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 2rem;
+}
+.contact-title {
+    color: #17a2b8;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+.contact-block {
+    margin-bottom: 1.2rem;
+    font-size: 1.08em;
+}
+.contact-block:last-child {
+    margin-bottom: 0;
+}
+.contact-block a {
+    color: #0056b3;
+    word-break: break-all;
+}
+.contact-block a:hover {
+    text-decoration: underline;
+}

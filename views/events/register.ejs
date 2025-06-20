@@ -4,8 +4,12 @@
     <%- include('../partials/_eventSubnav', { event: event }) %>
 
     <section class="event-registration">
-        <h2>Register for <%= event.name %></h2>
-        <%- include('_registrationForm', { eventId: event.id, errors: typeof errors !== 'undefined' ? errors : [], formData: typeof formData !== 'undefined' ? formData : {} }) %>
+        <h2>Registrace pro <%= event.name %></h2>
+        <article>Zaregistrujte se přímo na webu firmy zajišťující časomíru:</article>
+        <h3><a href="https://ptime.cz/zavod?id=560" target="_blank" class="btn">Zaregistrovat</a>
+        <%#
+        include('_registrationForm', { eventId: event.id, errors: typeof errors !== 'undefined' ? errors : [], formData: typeof formData !== 'undefined' ? formData : {} })
+         %>
     </section>
 </article>
 

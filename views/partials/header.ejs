@@ -17,7 +17,7 @@
     <header>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
+                <li><a href="/">Domu</a></li>
 
                 <% if (typeof events !== 'undefined' && events) { %>
                     <% events.forEach(event=> { %>
@@ -25,11 +25,10 @@
                     <% }); %>
                 <% } %>
 
+                <li><a href="/kontakt">Kontakt</a></li>
                 <% if (isAuthenticated) { %>
                     <li><a href="/admin/dashboard">Admin Dashboard</a></li>
                     <li><a href="/admin/logout">Logout</a></li>
-                <% } else { %>
-                    <li><a href="/admin/login">Admin Login</a></li>
                 <% } %>
             </ul>
         </nav>

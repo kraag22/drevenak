@@ -120,7 +120,7 @@ sequelize
       if (process.env.NODE_ENV === 'development') {
         Admin.findOrCreate({
           where: { username: 'admin' },
-          defaults: { password: 'password' }, // Password will be hashed by hook
+          defaults: { password: 'admin' }, // Password will be hashed by hook
         })
           .then(([admin, created]) => {
             if (created) {
@@ -128,7 +128,7 @@ sequelize
                 "Default admin user 'admin' (pw: 'password') created in persistent DB."
               );
             } else {
-              // console.log("Default admin user 'admin' already exists."); // Optional log
+               console.log("Default admin user 'admin' already exists."); // Optional log
             }
           })
           .catch((err) =>

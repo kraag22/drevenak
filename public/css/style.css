@@ -100,7 +100,7 @@ footer {
 
 .event-card img {
     width: 100%;
-    height: 180px; /* Fixed height for consistency */
+    height: 320px; /* Fixed height for consistency */
     object-fit: cover; /* Cover the area without distortion */
     display: block;
 }

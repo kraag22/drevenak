@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const eventController = require('../controllers/eventController');
 
+// fix old slug with correct name
+router.get('/papirovy-muz', (req, res) => { res.redirect(301, '/events/dreveny-muz'); });
+router.get('/papirovy-muz/register', (req, res) => { res.redirect(301, '/events/dreveny-muz/register'); });
+router.get('/papirovy-muz/participants', (req, res) => { res.redirect(301, '/events/dreveny-muz/participants'); });
+router.get('/papirovy-muz/track', (req, res) => { res.redirect(301, '/events/dreveny-muz/track'); });
+
 // GET /events/:eventSlug - Show specific event details page (description)
 router.get('/:eventSlug', eventController.showEvent);
 

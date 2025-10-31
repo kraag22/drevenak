@@ -1,0 +1,11 @@
+<%- include('../partials/header', { pageTitle: event.name, currentPage: 'photo' }) %>
+
+<article class="event-details">
+    <%- include('../partials/_eventSubnav', { event: event}) %>
+  <section>
+    <h1>Fotogalerie</h1>
+    <p>Galerii fotografií z předchozích ročníků najdete na serveru <a href="https://spolekdrevenehomuze.rajce.idnes.cz/" target="_blank" rel="noopener">Rajče</a>.</p>
+  </section>
+</article>
+
+<%- include('../partials/footer', { mapData: true }) %>

@@ -19,4 +19,6 @@ router.get('/:eventSlug/participants', eventController.showParticipants);
 
 router.get('/:eventSlug/track', eventController.showTrack);
 
+router.get('/:eventSlug/photo', eventController.showPhoto);
+
 module.exports = router;

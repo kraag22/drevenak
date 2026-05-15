@@ -38,6 +38,22 @@ router.get('/kontakt', async (req, res, next) => {
   }
 });
 
+router.get('/sponzori', async (req, res, next) => {
+  try {
+    const events = await Event.findAll({
+      attributes: ['id', 'name', 'slug', 'eventDate', 'imageUrl'],
+      order: [['name', 'ASC']],
+    });
+    res.render('sponzori', {
+      pageTitle: 'Sponzoři',
+      events: events,
+    });
+  } catch (error) {
+    console.error('Error fetching events for sponsors:', error);
+    next(error);
+  }
+});
+
 // POST /register/:eventId - Handle registration form submission
 router.post(
   '/register/:eventId',

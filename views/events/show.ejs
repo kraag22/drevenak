@@ -27,6 +27,25 @@
     <% } else { %>
         <p>Map location will be available soon.</p>
     <% } %>
+
+    <% if (event.slug === 'dreveny-muz') { %>
+    <section class="supporters" aria-label="Podpora projektu">
+        <div class="supporter-row">
+            <div class="supporter-logo">
+                <img src="/images/znak_luka.jpeg" alt="Znak městyse Luka nad Jihlavou" loading="lazy">
+            </div>
+            <p>
+                Tento projekt vznikl s podporou městyse Luka nad Jihlavou. Děkujeme za finanční a institucionální podporu, která umožnila realizaci této aktivity a přispěla k rozvoji sportovního života v našem regionu.
+            </p>
+        </div>
+        <div class="supporter-row">
+            <div class="supporter-logo">
+                <img src="/images/kv_240x80.png" alt="Kraj Vysočina" loading="lazy">
+            </div>
+            <p>finančně podpořil Kraj Vysočina</p>
+        </div>
+    </section>
+    <% } %>
 </article>
 
 <%- include('../partials/footer', { mapData: mapData }) %>

@@ -3,6 +3,13 @@ const path = require('path');
 const sharp = require('sharp');
 const { Event, Registration } = require('../models'); // Use index import
 
+// ============================================================
+// RACE DATE/TIME — single backend source of truth.
+// Change this one line to move the whole event; the template and the
+// countdown JS both derive everything from it.
+// ============================================================
+const RACE_DATE = new Date(2026, 7, 2, 10, 0); // 2 Aug 2026, 10:00 (local; month is 0-indexed)
+
 // Grid classes cycled over the gallery images to keep the mosaic layout.
 const GALLERY_TILE_PATTERN = ['g-w8', 'g-w4', 'g-tall', 'g-sq', 'g-sq', 'g-w4', 'g-w4', 'g-w4'];
 const IMAGE_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp']);
@@ -81,7 +88,7 @@ const loadSponsors = () => loadImages('sponzori');
 exports.renderHome = async (req, res, next) => {
   try {
     const [gallery, sponsors] = await Promise.all([loadGallery(), loadSponsors()]);
-    res.render('events/drevenymuz', { gallery, sponsors });
+    res.render('events/drevenymuz', { gallery, sponsors, raceDate: RACE_DATE });
   } catch (error) {
     next(error);
   }

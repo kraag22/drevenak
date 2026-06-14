@@ -1,9 +1,40 @@
+<%
+  // ============================================================
+  // RACE DATE/TIME comes from the backend (controllers/eventController.js
+  // -> RACE_DATE, passed in as `raceDate`). Everything below derives from it.
+  // ============================================================
+  const RACE = (function () {
+    const d = new Date(raceDate); // race date/time from the backend constant
+    const MONTHS_GEN = ["ledna", "února", "března", "dubna", "května", "června",
+      "července", "srpna", "září", "října", "listopadu", "prosince"];
+    const WEEKDAYS = ["neděle", "pondělí", "úterý", "středa", "čtvrtek", "pátek", "sobota"];
+    const pad = (n) => String(n).padStart(2, "0");
+    const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+    const day = d.getDate(), mon = d.getMonth(), year = d.getFullYear();
+    // Race is "past" once it's finished — after 14:00 (start + 4h) on race day.
+    const raceEnd = new Date(d.getTime() + 4 * 60 * 60 * 1000);
+    const isPast = Date.now() >= raceEnd.getTime();
+    return {
+      year,
+      isPast,                                                              // race already happened
+      nextYear: year + 1,                                                  // teaser year for next edition
+      futureDate: "první srpnový víkend " + (year + 1),                    // "první srpnový víkend 2027"
+      weekday: cap(WEEKDAYS[d.getDay()]),                                  // "Neděle"
+      short: day + "." + (mon + 1) + ".",                                  // "2.8."
+      numeric: day + ". " + (mon + 1) + ". " + year,             // "2. 8. 2026"
+      dayMonth: day + ". " + MONTHS_GEN[mon],                         // "2. srpna"
+      long: day + ". " + MONTHS_GEN[mon] + " " + year,          // "2. srpna 2026"
+      time: pad(d.getHours()) + ":" + pad(d.getMinutes()),                 // "10:00"
+      isoLocal: year + "-" + pad(mon + 1) + "-" + pad(day) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":00",
+    };
+  })();
+%>
 <!DOCTYPE html>
 <html lang="cs" data-direction="ember" data-display="oswald">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dřevěný muž 2026 — Triatlon · Luka nad Jihlavou</title>
+  <title>Dřevěný muž <%= RACE.year %> — Triatlon · Luka nad Jihlavou</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,8 +100,8 @@
   // and passed in by the controller.
   const GALLERY = (typeof gallery !== 'undefined' && gallery) ? gallery : [];
   const facts = [
-    { ic: "calendar", v: "2.8.", k: "Neděle 2026" },
-    { ic: "clock", v: "10:00", k: "Start závodu" },
+    { ic: "calendar", v: RACE.short, k: RACE.weekday + " " + RACE.year },
+    { ic: "clock", v: RACE.time, k: "Start závodu" },
     { ic: "pin", v: "Luka", k: "nad Jihlavou" },
     { ic: "flag", v: "3", k: "Tratě na výběr" },
   ];
@@ -114,7 +145,7 @@
     <!-- ---------------- HERO ---------------- -->
     <header class="hero" id="top">
       <div class="hero-top">
-        <span class="kicker">Triatlon · 2. ročník</span>
+        <span class="kicker">Triatlon · 35. ročník</span>
         <span class="hero-loc mono">Luka nad Jihlavou — Vysočina</span>
       </div>
 
@@ -126,11 +157,21 @@
       <div class="hero-controls">
         <div class="hero-left">
           <div class="hero-date h-display">
-            Neděle <b>2.&nbsp;srpna&nbsp;2026</b>
+            <% if (RACE.isPast) { %>
+              <b><%= RACE.futureDate %></b>
+            <% } else { %>
+              <%= RACE.weekday %> <b><%= RACE.long %></b>
+            <% } %>
           </div>
-          <div class="hero-time mono">Prezentace 8:15 · Start 10:00 — pláž u&nbsp;přehrady</div>
+          <div class="hero-time mono">
+            <% if (RACE.isPast) { %>
+              Přesný termín a&nbsp;čas upřesníme
+            <% } else { %>
+              Prezentace 8:15 · Start <%= RACE.time %> — pláž u&nbsp;přehrady
+            <% } %>
+          </div>
           <p class="sub">
-            Tři tratě, jedna nedělní bitva dřeva a&nbsp;vody u&nbsp;jihlavské přehrady.
+            Tři tratě, jedna nedělní bitva.
             Plav, šlap, běž — a&nbsp;staň se Dřevěným mužem.
           </p>
           <div class="hero-actions">
@@ -152,7 +193,7 @@
       <div class="wrap">
         <div class="sec-head reveal">
           <span class="kicker">01 — Informace</span>
-          <h2 class="title">Triatlon <span class="accent">Dřevěný&nbsp;muž</span><br>Luka nad Jihlavou 2026</h2>
+          <h2 class="title">Triatlon <span class="accent">Dřevěný&nbsp;muž</span><br>Luka nad Jihlavou <%= RACE.year %></h2>
         </div>
 
         <div class="facts reveal">
@@ -170,7 +211,7 @@
             <p class="body">
               Spolek Dřevěného muže z&nbsp;Luk nad&nbsp;Jihlavou pro vás pravidelně připravuje
               sportovní a&nbsp;společenské akce v&nbsp;přátelské atmosféře a&nbsp;krásné přírodě
-              Vysočiny. Závod proběhne <strong>první srpnovou neděli 2.&nbsp;8.&nbsp;2026</strong> u&nbsp;přehrady
+              Vysočiny. Závod proběhne <strong><%= RACE.isPast ? RACE.futureDate : RACE.long %></strong> u&nbsp;přehrady
               poblíž Luk nad Jihlavou.
             </p>
             <p class="body">
@@ -253,17 +294,41 @@
 
         <div class="reg-grid">
           <div class="reg-aside reveal">
-            <div class="big">Buď u&nbsp;toho<br><span class="accent">2. srpna.</span></div>
+            <div class="big">Buď u&nbsp;toho<br><span class="accent"><% if (RACE.isPast) { %><%= RACE.futureDate %>.<% } else { %><%= RACE.dayMonth %>.<% } %></span></div>
             <ul>
               <% regBenefits.forEach(t => { %>
                 <li><span class="tick"><%- icon('tick', 18) %></span><%= t %></li>
               <% }); %>
             </ul>
+
+            <div class="reg-schedule">
+              <div class="sched-item">
+                <div class="sched-time">8.15 – 9.00</div>
+                <div class="sched-title">Prezentace</div>
+                <div class="sched-desc">Na&nbsp;náměstí v&nbsp;Lukách u&nbsp;zdravotního střediska</div>
+              </div>
+              <div class="sched-item">
+                <div class="sched-time">9.30</div>
+                <div class="sched-title">Poučení účastníků</div>
+                <div class="sched-desc">Na&nbsp;náměstí (poté přesun ke&nbsp;„Gabčíkovu“)</div>
+              </div>
+              <div class="sched-item">
+                <div class="sched-time">10.00</div>
+                <div class="sched-title">Start</div>
+                <div class="sched-desc">„Gabčíkovo“</div>
+              </div>
+            </div>
           </div>
 
           <div class="card form-card reveal">
-            <p class="reg-intro">Zaregistrujte se přímo na&nbsp;webu firmy zajišťující časomíru:</p>
-            <a href="https://ptime.cz/zavod?id=771" class="btn reg-cta" target="_blank" rel="noopener">Zaregistrovat <%- icon('arrow', 18, { className: 'arrow' }) %></a>
+            <% if (RACE.isPast) { %>
+              <p class="reg-intro">Ročník <%= RACE.year %> už proběhl — děkujeme všem závodníkům! Registraci
+                na&nbsp;další ročník otevřeme před závodem (<%= RACE.futureDate %>).</p>
+              <span class="btn reg-cta is-disabled" aria-disabled="true">Registrace uzavřena</span>
+            <% } else { %>
+              <p class="reg-intro">Zaregistrujte se přímo na&nbsp;webu firmy zajišťující časomíru:</p>
+              <a href="https://ptime.cz/zavod?id=771" class="btn reg-cta" target="_blank" rel="noopener">Zaregistrovat <%- icon('arrow', 18, { className: 'arrow' }) %></a>
+            <% } %>
 
             <div class="price-list">
               <div class="price-item">
@@ -279,24 +344,6 @@
                   pro&nbsp;každého člena štafety.</p>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div class="reg-schedule reveal">
-          <div class="sched-item">
-            <div class="sched-time">8.15 – 9.00</div>
-            <div class="sched-title">Prezentace</div>
-            <div class="sched-desc">Na&nbsp;náměstí v&nbsp;Lukách u&nbsp;zdravotního střediska</div>
-          </div>
-          <div class="sched-item">
-            <div class="sched-time">9.30</div>
-            <div class="sched-title">Poučení účastníků</div>
-            <div class="sched-desc">Na&nbsp;náměstí (poté přesun ke&nbsp;„Gabčíkovu“)</div>
-          </div>
-          <div class="sched-item">
-            <div class="sched-time">10.00</div>
-            <div class="sched-title">Start</div>
-            <div class="sched-desc">„Gabčíkovo“</div>
           </div>
         </div>
 
@@ -420,8 +467,8 @@
         </div>
       </div>
       <div class="foot-bottom">
-        <span>© 2026 Spolek Dřevěného muže</span>
-        <span>Triatlon · 2. 8. 2026 · 10:00</span>
+        <span>© <%= RACE.year %> Spolek Dřevěného muže</span>
+        <span>Triatlon · <% if (RACE.isPast) { %><%= RACE.futureDate %><% } else { %><%= RACE.numeric %> · <%= RACE.time %><% } %></span>
       </div>
     </div>
   </footer>
@@ -435,6 +482,7 @@
     <div class="lb-count"></div>
   </div>
 
+  <script>window.RACE_DATE = "<%= RACE.isoLocal %>";</script>
   <script src="/js/drevenymuz.js"></script>
 </body>
 </html>

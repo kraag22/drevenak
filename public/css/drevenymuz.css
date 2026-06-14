@@ -373,6 +373,33 @@ html.armed .reveal.in { opacity: 1; transform: none; }
 .cd-num::after { content: ""; position: absolute; left: 0; bottom: 0; width: 28px; height: 3px; background: var(--accent); transform: skewX(-18deg); }
 .cd-label { font-family: var(--f-mono); font-size: 0.66rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-top: 12px; }
 
+/* "race in progress" state, replaces the countdown numbers during the race */
+.countdown--live { align-items: center; }
+.cd-live {
+  font-family: var(--f-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  color: var(--accent);
+  position: relative;
+  padding-left: 26px;
+}
+.cd-live::before {
+  content: "";
+  position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 13px; height: 13px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 var(--glow);
+  animation: live-pulse 1.6s ease-out infinite;
+}
+@keyframes live-pulse {
+  0% { box-shadow: 0 0 0 0 var(--glow); }
+  70% { box-shadow: 0 0 0 14px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
 .scroll-hint {
   position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
   z-index: 3; font-family: var(--f-mono); font-size: 0.62rem; letter-spacing: 0.25em;
@@ -506,6 +533,7 @@ html.armed .reveal.in { opacity: 1; transform: none; }
 /* external registration CTA + startovné */
 .reg-intro { color: var(--ink-dim); font-size: 1.05rem; margin-bottom: 18px; }
 .reg-cta { width: 100%; justify-content: center; }
+.btn.is-disabled { background: var(--bg-3); color: var(--muted); cursor: not-allowed; pointer-events: none; box-shadow: none; }
 .price-list { display: flex; flex-direction: column; gap: 16px; margin-top: 30px; }
 .price-item { padding: 22px 24px; background: var(--bg-1); border: 1px solid var(--line-soft); border-radius: var(--r); border-left: 3px solid var(--accent); }
 .price-item h4 { font-family: var(--f-display); text-transform: uppercase; letter-spacing: 0.05em; font-size: 1.05rem; }
@@ -513,13 +541,15 @@ html.armed .reveal.in { opacity: 1; transform: none; }
 .price-item .amount span { font-family: var(--f-mono); font-size: 0.8rem; font-weight: 400; color: var(--muted); letter-spacing: 0.04em; }
 .price-item p { color: var(--ink-dim); font-size: 0.95rem; }
 
-/* registration schedule + details */
-.reg-schedule { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); border-radius: var(--r-lg); overflow: hidden; margin-top: clamp(40px, 5vw, 64px); }
-.sched-item { background: var(--bg-1); padding: 28px 26px; transition: background .25s; }
+/* registration schedule (compact, sits inside reg-aside) */
+.reg-schedule { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); border-radius: var(--r); overflow: hidden; margin-top: 28px; }
+.sched-item { background: var(--bg-1); padding: 12px 16px; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; transition: background .25s; }
 .sched-item:hover { background: var(--bg-2); }
-.sched-time { font-family: var(--f-display); font-weight: 700; font-size: 1.7rem; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
-.sched-title { font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 1.05rem; margin: 12px 0 6px; }
-.sched-desc { color: var(--ink-dim); font-size: 0.92rem; }
+.sched-time { font-family: var(--f-display); font-weight: 700; font-size: 1rem; line-height: 1.2; color: var(--accent); font-variant-numeric: tabular-nums; flex: none; min-width: 76px; }
+.sched-title { font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.82rem; }
+.sched-desc { flex-basis: 100%; color: var(--muted); font-size: 0.78rem; }
+
+/* registration details */
 
 .reg-detail { margin-top: clamp(34px, 4vw, 52px); max-width: 78ch; }
 .reg-detail h3 { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 1.3rem; margin-bottom: 20px; }
@@ -532,7 +562,6 @@ html.armed .reveal.in { opacity: 1; transform: none; }
 .reg-warn { padding: 18px 22px; background: var(--bg-2); border-left: 3px solid var(--accent); border-radius: var(--r); color: var(--ink-dim); font-size: 0.95rem; }
 .reg-warn strong { color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; }
 
-@media (max-width: 700px) { .reg-schedule { grid-template-columns: 1fr; } }
 
 /* ---------------- FOTOGALERIE ---------------- */
 .gallery { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; grid-auto-rows: 180px; }

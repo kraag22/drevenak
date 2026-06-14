@@ -48,13 +48,33 @@
   }
 
   // ---------------- COUNTDOWN ----------------
-  const RACE_DATE = new Date("2026-08-02T10:00:00");
+  const RACE_DATE = new Date(window.RACE_DATE || "2026-08-02T10:00:00");
+  const RACE_DURATION_MS = 4 * 60 * 60 * 1000; // race window: start (10:00) → +4h (14:00)
   const cd = document.querySelector(".countdown");
   if (cd) {
+    const START = RACE_DATE.getTime();
+    const END = START + RACE_DURATION_MS;
     const pad = (n) => String(n).padStart(2, "0");
-    const nums = cd.querySelectorAll(".cd-num");
+    const nums = cd.querySelectorAll(".cd-num"); // used only before the race starts
+    let mode = "count";
     const tick = () => {
-      let diff = Math.max(0, RACE_DATE.getTime() - Date.now());
+      const now = Date.now();
+      if (now >= END) {
+        // Race finished — hide the countdown.
+        if (mode !== "done") { cd.style.display = "none"; mode = "done"; }
+        return;
+      }
+      if (now >= START) {
+        // Race in progress (10:00–14:00) — show a live message instead of zeros.
+        if (mode !== "live") {
+          cd.classList.add("countdown--live");
+          cd.innerHTML = '<div class="cd-live">Závod právě probíhá</div>';
+          mode = "live";
+        }
+        return;
+      }
+      // Before the race — count down to the start.
+      let diff = START - now;
       const d = Math.floor(diff / 86400000); diff -= d * 86400000;
       const h = Math.floor(diff / 3600000); diff -= h * 3600000;
       const m = Math.floor(diff / 60000); diff -= m * 60000;

@@ -1,64 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { Event } = require('../models'); // Import Event model
-const registrationController = require('../controllers/registrationController');
+const eventController = require('../controllers/eventController');
 
-// GET / - Homepage
-router.get('/', async (req, res, next) => {
-  try {
-    // Fetch minimal event data for the homepage links
-    const events = await Event.findAll({
-      attributes: ['id', 'name', 'slug', 'eventDate', 'imageUrl'],
-      order: [['name', 'ASC']],
-    });
-    res.render('index', {
-      pageTitle: 'Spolek Dřevěného muže',
-      events: events,
-    });
-  } catch (error) {
-    console.error('Error fetching events for homepage:', error);
-    next(error);
-  }
-});
+// GET / - Homepage renders the "Dřevěný muž" single-page landing directly.
+router.get('/', eventController.renderHome);
 
-router.get('/kontakt', async (req, res, next) => {
-  try {
-    // Fetch minimal event data for the homepage links
-    const events = await Event.findAll({
-      attributes: ['id', 'name', 'slug', 'eventDate', 'imageUrl'],
-      order: [['name', 'ASC']],
-    });
-    res.render('kontakt', {
-      pageTitle: 'Kontakt',
-      events: events,
-    });
-  } catch (error) {
-    console.error('Error fetching events for contact:', error);
-    next(error);
-  }
-});
+// Old standalone pages are now sections of the homepage — 301 to / for SEO.
+router.get('/kontakt', (req, res) => res.redirect(301, '/'));
+router.get('/sponzori', (req, res) => res.redirect(301, '/'));
 
-router.get('/sponzori', async (req, res, next) => {
-  try {
-    const events = await Event.findAll({
-      attributes: ['id', 'name', 'slug', 'eventDate', 'imageUrl'],
-      order: [['name', 'ASC']],
-    });
-    res.render('sponzori', {
-      pageTitle: 'Sponzoři',
-      events: events,
-    });
-  } catch (error) {
-    console.error('Error fetching events for sponsors:', error);
-    next(error);
-  }
-});
-
-// POST /register/:eventId - Handle registration form submission
-router.post(
-  '/register/:eventId',
-  registrationController.validateRegistration, // Use validation middleware first
-  registrationController.createRegistration // Then the controller action
-);
+// Old registration endpoint (registration is now handled externally).
+router.post('/register/:eventId', (req, res) => res.redirect(301, '/'));
 
 module.exports = router;

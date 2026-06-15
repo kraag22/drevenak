@@ -1,0 +1,488 @@
+<%
+  // ============================================================
+  // RACE DATE/TIME comes from the backend (controllers/eventController.js
+  // -> RACE_DATE, passed in as `raceDate`). Everything below derives from it.
+  // ============================================================
+  const RACE = (function () {
+    const d = new Date(raceDate); // race date/time from the backend constant
+    const MONTHS_GEN = ["ledna", "února", "března", "dubna", "května", "června",
+      "července", "srpna", "září", "října", "listopadu", "prosince"];
+    const WEEKDAYS = ["neděle", "pondělí", "úterý", "středa", "čtvrtek", "pátek", "sobota"];
+    const pad = (n) => String(n).padStart(2, "0");
+    const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+    const day = d.getDate(), mon = d.getMonth(), year = d.getFullYear();
+    // Race is "past" once it's finished — after 14:00 (start + 4h) on race day.
+    const raceEnd = new Date(d.getTime() + 4 * 60 * 60 * 1000);
+    const isPast = Date.now() >= raceEnd.getTime();
+    return {
+      year,
+      isPast,                                                              // race already happened
+      nextYear: year + 1,                                                  // teaser year for next edition
+      futureDate: "první srpnový víkend " + (year + 1),                    // "první srpnový víkend 2027"
+      weekday: cap(WEEKDAYS[d.getDay()]),                                  // "Neděle"
+      short: day + "." + (mon + 1) + ".",                                  // "2.8."
+      numeric: day + ". " + (mon + 1) + ". " + year,             // "2. 8. 2026"
+      dayMonth: day + ". " + MONTHS_GEN[mon],                         // "2. srpna"
+      long: day + ". " + MONTHS_GEN[mon] + " " + year,          // "2. srpna 2026"
+      time: pad(d.getHours()) + ":" + pad(d.getMinutes()),                 // "10:00"
+      isoLocal: year + "-" + pad(mon + 1) + "-" + pad(day) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":00",
+    };
+  })();
+%>
+<!DOCTYPE html>
+<html lang="cs" data-direction="ember" data-display="oswald">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dřevěný muž <%= RACE.year %> — Triatlon · Luka nad Jihlavou</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=Barlow:wght@400;500;600;700&family=Oswald:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/drevenymuz.css">
+
+  <% if (process.env.NODE_ENV === 'production') { %>
+    <script defer data-domain="drevenak-luka.cz" src="https://plausible.kraag22.com/js/plausible.js"></script>
+  <% } %>
+</head>
+<body>
+<%
+  // ---- inline stroke icons (paths lifted from the design) ----
+  const Ic = {
+    swim: "M2 16c1.5 0 1.5 1 3 1s1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1M6 10l4 3M9 7l4 3M8 8a2 2 0 104 0 2 2 0 00-4 0",
+    bike: "M5 18a3 3 0 100-6 3 3 0 000 6zM19 18a3 3 0 100-6 3 3 0 000 6zM9 15l3-7 3 4h3M12 8l-2 0M14 5h2l1 3",
+    run: "M13 5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM7 21l3-5 2-3-1-4-3 2-1 3M12 13l3 1 1 4M10 8l3-1 3 2",
+    calendar: "M4 5h16v15H4zM4 9h16M8 3v4M16 3v4",
+    clock: "M12 21a9 9 0 100-18 9 9 0 000 18zM12 7v5l3 2",
+    pin: "M12 21s7-6.3 7-11a7 7 0 10-14 0c0 4.7 7 11 7 11zM12 12a2.5 2.5 0 100-5 2.5 2.5 0 000 5z",
+    flag: "M5 21V4M5 4h13l-2.5 4L18 12H5",
+    trophy: "M7 4h10v4a5 5 0 01-10 0V4zM7 6H4v1a3 3 0 003 3M17 6h3v1a3 3 0 01-3 3M9 16h6M10 16v3M14 16v3M8 21h8",
+    camera: "M3 8h3l2-2h8l2 2h3v12H3zM12 17a4 4 0 100-8 4 4 0 000 8z",
+    arrow: "M5 12h14M13 6l6 6-6 6",
+    check: "M5 13l4 4L19 7",
+    tick: "M4 12l5 5L20 6",
+    close: "M6 6l12 12M18 6L6 18",
+    chevL: "M15 5l-7 7 7 7",
+    chevR: "M9 5l7 7-7 7",
+    zoom: "M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5M11 8v6M8 11h6",
+    link: "M9 15l6-6M8 8H6a3 3 0 000 6h2M16 16h2a3 3 0 000-6h-2",
+  };
+  function icon(name, size, opts) {
+    opts = opts || {};
+    const sw = opts.sw || 1.7;
+    const cls = opts.className ? ' class="' + opts.className + '"' : '';
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + sw + '" stroke-linecap="round" stroke-linejoin="round"' + cls + '><path d="' + Ic[name] + '"/></svg>';
+  }
+
+  const COURSES = {
+    kratka: { name: "Krátká", tag: "začátečníci" },
+    dlouha: { name: "Dlouhá", tag: "pokročilí" },
+    olympijska: { name: "Olympijská", tag: "elite" },
+  };
+  const COURSE_ORDER = ["kratka", "dlouha", "olympijska"];
+  // default shown course = dlouha
+  const DISCIPLINES = [
+    { key: "swim", name: "Plavání", bg: "/images/dm/figSwim.jpeg", map: "/images/swim.jpeg", num: "01", dist: 500, unit: "m", laps: "1 okruh", cap: "Plavání — jezero <b>Loudilka</b>, okruh tam a&nbsp;zpět" },
+    { key: "bike", name: "Kolo", bg: "/images/dm/figBike.jpeg", map: "/images/bike.jpeg", num: "02", dist: 24, unit: "km", laps: "2 okruhy", cap: "Kolo — okruhová trať kolem <b>Luk nad Jihlavou</b>" },
+    { key: "run", name: "Běh", bg: "/images/dm/figRun.jpeg", map: "/images/run.jpeg", num: "03", dist: 5, unit: "km", laps: "2 okruhy", cap: "Běh — závěrečný běžecký <b>okruh u&nbsp;přehrady</b>" },
+  ];
+  const CATEGORIES = [
+    { label: "Muži do 19 let" },
+    { label: "Muži 20–39 let" },
+    { label: "Muži 40–49 let" },
+    { label: "Muži 50–59 let" },
+    { label: "Muži nad 60 let" },
+    { label: "Ženy do 39 let" },
+    { label: "Ženy nad 40 let" },
+    { label: "Štafety" },
+  ];
+  // Gallery images are loaded from public/images/gallery (ordered by date)
+  // and passed in by the controller.
+  const GALLERY = (typeof gallery !== 'undefined' && gallery) ? gallery : [];
+  const facts = [
+    { ic: "calendar", v: RACE.short, k: RACE.weekday + " " + RACE.year },
+    { ic: "clock", v: RACE.time, k: "Start závodu" },
+    { ic: "pin", v: "Luka", k: "nad Jihlavou" },
+    { ic: "flag", v: "3", k: "Tratě na výběr" },
+  ];
+  const navItems = [
+    { id: "informace", label: "Informace" },
+    { id: "trat", label: "Trať" },
+    { id: "registrace", label: "Registrace" },
+    { id: "fotogalerie", label: "Fotogalerie" },
+    { id: "sponzori", label: "Sponzoři" },
+    { id: "kontakt", label: "Kontakt" },
+  ];
+  const regBenefits = [
+    "Online přihláška do 30. 7. 2026",
+    "Startovné na místě v hotovosti",
+    "Změřený čas a výsledky online",
+    "Občerstvení a zázemí v cíli",
+  ];
+%>
+
+  <!-- ---------------- NAV ---------------- -->
+  <nav class="nav">
+    <div class="wrap">
+      <a href="#top" class="brand">
+        <span class="mark"><span>DM</span></span>
+        <span>
+          <b>Dřevěný&nbsp;muž</b>
+          <small>LUKA NAD JIHLAVOU</small>
+        </span>
+      </a>
+      <div class="nav-links">
+        <% navItems.forEach(n => { %>
+          <a href="#<%= n.id %>"><%= n.label %></a>
+        <% }); %>
+      </div>
+      <a href="#registrace" class="btn btn--sm nav-cta">Registrovat se</a>
+      <button class="nav-burger" aria-label="Menu"></button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ---------------- HERO ---------------- -->
+    <header class="hero" id="top">
+      <div class="hero-top">
+        <span class="kicker">Triatlon · 35. ročník</span>
+        <span class="hero-loc mono">Luka nad Jihlavou — Vysočina</span>
+      </div>
+
+      <div class="hero-poster">
+        <span class="poster-edge"></span>
+        <img src="/images/dm/heroBanner.jpeg" alt="Spolek Dřevěného muže — Luka nad Jihlavou">
+      </div>
+
+      <div class="hero-controls">
+        <div class="hero-left">
+          <div class="hero-date h-display">
+            <% if (RACE.isPast) { %>
+              <b><%= RACE.futureDate %></b>
+            <% } else { %>
+              <%= RACE.weekday %> <b><%= RACE.long %></b>
+            <% } %>
+          </div>
+          <div class="hero-time mono">
+            <% if (RACE.isPast) { %>
+              Přesný termín a&nbsp;čas upřesníme
+            <% } else { %>
+              Prezentace 8:15 · Start <%= RACE.time %> — pláž u&nbsp;přehrady
+            <% } %>
+          </div>
+          <p class="sub">
+            Tři tratě, jedna nedělní bitva.
+            Plav, šlap, běž — a&nbsp;staň se Dřevěným mužem.
+          </p>
+          <div class="hero-actions">
+            <a href="#registrace" class="btn">Registrovat se <%- icon('arrow', 18, { className: 'arrow' }) %></a>
+            <a href="#trat" class="btn btn--ghost">Prohlédnout trať</a>
+          </div>
+        </div>
+        <div class="countdown">
+          <div class="cd-unit"><div class="cd-num">—</div><div class="cd-label">Dní</div></div>
+          <div class="cd-unit"><div class="cd-num">—</div><div class="cd-label">Hodin</div></div>
+          <div class="cd-unit"><div class="cd-num">—</div><div class="cd-label">Minut</div></div>
+          <div class="cd-unit"><div class="cd-num">—</div><div class="cd-label">Sekund</div></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ---------------- INFORMACE ---------------- -->
+    <section class="section" id="informace">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="kicker">01 — Informace</span>
+          <h2 class="title">Triatlon <span class="accent">Dřevěný&nbsp;muž</span><br>Luka nad Jihlavou <%= RACE.year %></h2>
+        </div>
+
+        <div class="facts reveal">
+          <% facts.forEach(f => { %>
+            <div class="fact">
+              <span class="ic"><%- icon(f.ic, 26) %></span>
+              <div class="v"><%= f.v %></div>
+              <div class="k"><%= f.k %></div>
+            </div>
+          <% }); %>
+        </div>
+
+        <div class="info-grid">
+          <div class="reveal">
+            <p class="body">
+              Spolek Dřevěného muže z&nbsp;Luk nad&nbsp;Jihlavou pro vás pravidelně připravuje
+              sportovní a&nbsp;společenské akce v&nbsp;přátelské atmosféře a&nbsp;krásné přírodě
+              Vysočiny. Závod proběhne <strong><%= RACE.isPast ? RACE.futureDate : RACE.long %></strong> u&nbsp;přehrady
+              poblíž Luk nad Jihlavou.
+            </p>
+            <p class="body">
+              Přijďte si zasportovat, pobavit se a&nbsp;potkat skvělé lidi — ať už útočíte na&nbsp;olympijskou
+              trať, nebo si jdete poprvé zkusit kratší okruh.
+            </p>
+            <div class="linkrow">
+              <a href="https://ptime.cz/data/vysledky_pdf/560/vysledky.pdf" target="_blank" rel="noopener">Výsledky 2025 <%- icon('trophy', 20, { className: 'arrow' }) %></a>
+              <a href="https://spolekdrevenehomuze.rajce.idnes.cz/" target="_blank" rel="noopener">Fotky na rajce.cz <%- icon('camera', 20, { className: 'arrow' }) %></a>
+            </div>
+          </div>
+
+          <div class="card kat-panel reveal">
+            <h3>Kategorie</h3>
+            <p class="note">Závodí se v&nbsp;mužských i&nbsp;ženských věkových kategoriích a&nbsp;ve štafetách.</p>
+            <div class="kat-list">
+              <% CATEGORIES.forEach(k => { %>
+                <span class="kat"><%= k.label %></span>
+              <% }); %>
+            </div>
+            <p class="kat-note">U&nbsp;mladších 18&nbsp;let je nutný písemný souhlas rodiče.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------- TRAŤ ---------------- -->
+    <section class="section section--alt" id="trat">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="row">
+            <div>
+              <span class="kicker">02 — Trať</span>
+              <h2 class="title">Vyber si svou <span class="accent">bitvu</span></h2>
+            </div>
+            <p class="lead">V&nbsp;letošním ročníku bude na&nbsp;výběr ze&nbsp;tří tratí. Přepni si je
+              a&nbsp;podívej se, co tě čeká v&nbsp;každé disciplíně.</p>
+          </div>
+        </div>
+
+        <div class="course-tabs reveal">
+          <% COURSE_ORDER.forEach(key => { %>
+            <button class="course-tab<%= key === 'dlouha' ? ' active' : '' %>" data-course="<%= key %>">
+              <%= COURSES[key].name %><span class="tag"><%= COURSES[key].tag %></span>
+            </button>
+          <% }); %>
+        </div>
+
+        <div class="disc-grid reveal">
+          <% DISCIPLINES.forEach((d, i) => { %>
+            <div class="disc<%= i === 0 ? ' disc-active' : '' %>" data-disc="<%= d.key %>" data-img="<%= d.map %>" data-cap="<%= d.cap %>" role="button" tabindex="0" aria-label="Zobrazit mapu: <%= d.name %>">
+              <div class="img" style="background-image: url('<%= d.bg %>')"></div>
+              <div class="veil"></div>
+              <span class="num"><%= d.num %> / 03</span>
+              <div class="body">
+                <h3><%= d.name %></h3>
+                <div class="dist disc-flip"><%= d.dist %><span class="u"><%= d.unit %></span></div>
+                <div class="laps"><%= d.laps %></div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+
+        <div class="map-block reveal">
+          <div class="map-frame">
+            <div class="cap" id="trat-map-cap">Plavání — jezero <b>Loudilka</b>, okruh tam a&nbsp;zpět</div>
+            <img id="trat-map-img" src="/images/swim.jpeg" alt="Plavání">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------- REGISTRACE ---------------- -->
+    <section class="section" id="registrace">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="kicker">03 — Registrace</span>
+          <h2 class="title">Přihlas se <span class="accent">na start</span></h2>
+        </div>
+
+        <div class="reg-grid">
+          <div class="reg-aside reveal">
+            <div class="big">Buď u&nbsp;toho<br><span class="accent"><% if (RACE.isPast) { %><%= RACE.futureDate %>.<% } else { %><%= RACE.dayMonth %>.<% } %></span></div>
+            <ul>
+              <% regBenefits.forEach(t => { %>
+                <li><span class="tick"><%- icon('tick', 18) %></span><%= t %></li>
+              <% }); %>
+            </ul>
+
+            <div class="reg-schedule">
+              <div class="sched-item">
+                <div class="sched-time">8.15 – 9.00</div>
+                <div class="sched-title">Prezentace</div>
+                <div class="sched-desc">Na&nbsp;náměstí v&nbsp;Lukách u&nbsp;zdravotního střediska</div>
+              </div>
+              <div class="sched-item">
+                <div class="sched-time">9.30</div>
+                <div class="sched-title">Poučení účastníků</div>
+                <div class="sched-desc">Na&nbsp;náměstí (poté přesun ke&nbsp;„Gabčíkovu“)</div>
+              </div>
+              <div class="sched-item">
+                <div class="sched-time">10.00</div>
+                <div class="sched-title">Start</div>
+                <div class="sched-desc">„Gabčíkovo“</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card form-card reveal">
+            <% if (RACE.isPast) { %>
+              <p class="reg-intro">Ročník <%= RACE.year %> už proběhl — děkujeme všem závodníkům! Registraci
+                na&nbsp;další ročník otevřeme před závodem (<%= RACE.futureDate %>).</p>
+              <span class="btn reg-cta is-disabled" aria-disabled="true">Registrace uzavřena</span>
+            <% } else { %>
+              <p class="reg-intro">Zaregistrujte se přímo na&nbsp;webu firmy zajišťující časomíru:</p>
+              <a href="https://ptime.cz/zavod?id=771" class="btn reg-cta" target="_blank" rel="noopener">Zaregistrovat <%- icon('arrow', 18, { className: 'arrow' }) %></a>
+            <% } %>
+
+            <div class="price-list">
+              <div class="price-item">
+                <h4>Startovné — jednotlivec</h4>
+                <div class="amount">350 Kč</div>
+                <p>V&nbsp;ceně jídlo a&nbsp;pitný režim, účastnická medaile.</p>
+              </div>
+              <div class="price-item">
+                <h4>Startovné — štafety</h4>
+                <div class="amount">750 Kč <span>/ štafeta</span></div>
+                <p>Lze se přihlásit ve&nbsp;dvou nebo tříčlenné štafetě. V&nbsp;tomto případě je startovné
+                  750&nbsp;Kč za&nbsp;celou štafetu. V&nbsp;ceně jídlo a&nbsp;pitný režim, účastnická medaile
+                  pro&nbsp;každého člena štafety.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reg-detail reveal">
+          <h3>Postup registrace</h3>
+          <ol class="reg-steps">
+            <li>Vyplnění prezenčního lístku závodníkem včetně podpisu.</li>
+            <li>Zakoupení startovního čísla (prezenčního lístku) oproti zaplacení startovného, předání
+              „pitného režimu“, poukazu na&nbsp;jídlo a&nbsp;nápoj, napsání čísla na&nbsp;tělo a&nbsp;převzetí
+              tašky s&nbsp;číslem (tyto tašky pořadatelé po&nbsp;plavání převezou do&nbsp;depa na&nbsp;náměstí
+              i&nbsp;s&nbsp;uloženými věcmi závodníků — důležitá informace pro&nbsp;závodníky bez&nbsp;doprovodu).</li>
+          </ol>
+
+          <ul class="reg-notes">
+            <li>Účastnická medaile bude předána po&nbsp;závodě výměnou za&nbsp;startovní číslo.</li>
+            <li>Používání přilby je při&nbsp;závodě povinné. Triatlonové nástavce na&nbsp;řidítka jsou zakázané
+              a&nbsp;neopren bude povolen dle&nbsp;teploty vody.</li>
+          </ul>
+
+          <p class="reg-warn"><strong>Upozornění:</strong> závod probíhá za&nbsp;plného provozu, a&nbsp;přestože
+            na&nbsp;některých místech bude asistence policie, je třeba dodržovat pravidla silničního provozu.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------- FOTOGALERIE ---------------- -->
+    <section class="section section--alt" id="fotogalerie">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="row">
+            <div>
+              <span class="kicker">04 — Fotogalerie</span>
+              <h2 class="title">Dřevo, voda <span class="accent">a pot</span></h2>
+            </div>
+            <a href="https://spolekdrevenehomuze.rajce.idnes.cz/" class="btn btn--ghost btn--sm" target="_blank" rel="noopener">Celá galerie na rajce.cz <%- icon('link', 16) %></a>
+          </div>
+        </div>
+
+        <div class="gallery reveal">
+          <% GALLERY.forEach(g => { %>
+            <div class="gitem <%= g.cls %>">
+              <img src="<%= g.thumb %>" data-full="<%= g.full %>" alt="<%= g.cap %>" loading="lazy">
+              <span class="cap"><%= g.cap %></span>
+              <span class="zoom"><%- icon('zoom', 18) %></span>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------- PARTNEŘI ---------------- -->
+    <section class="section" id="partneri">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="kicker">— Partneři</span>
+          <h2 class="title">Díky za <span class="accent">podporu</span></h2>
+        </div>
+        <div class="partners reveal">
+          <div class="card partner">
+            <div class="logo"><img src="/images/dm/logoLuka.jpeg" alt="Městys Luka nad Jihlavou"></div>
+            <div class="txt">
+              <h4>Městys Luka nad Jihlavou</h4>
+              <p>Tento projekt vznikl s&nbsp;podporou městyse Luka nad&nbsp;Jihlavou. Děkujeme za&nbsp;finanční
+                a&nbsp;institucionální podporu, která přispěla k&nbsp;rozvoji sportovního života v&nbsp;regionu.</p>
+            </div>
+          </div>
+          <div class="card partner">
+            <div class="logo"><img src="/images/dm/logoVysocina.jpeg" alt="Kraj Vysočina"></div>
+            <div class="txt">
+              <h4>Kraj Vysočina</h4>
+              <p>Akci finančně podpořil Kraj&nbsp;Vysočina v&nbsp;rámci podpory regionálních sportovních
+                a&nbsp;volnočasových aktivit.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------- SPONZOŘI (loaded from /images/sponzori) ---------------- -->
+    <% const SPONSORS = (typeof sponsors !== 'undefined' && sponsors) ? sponsors : []; %>
+    <% if (SPONSORS.length) { %>
+    <section class="section section--alt" id="sponzori">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="kicker">— Sponzoři</span>
+          <h2 class="title">Naši <span class="accent">sponzoři</span></h2>
+        </div>
+        <div class="sponsor-grid reveal">
+          <% SPONSORS.forEach(s => { %>
+            <div class="sponsor-item">
+              <img src="<%= s.thumb %>" data-full="<%= s.full %>" alt="<%= s.cap %>" loading="lazy">
+            </div>
+          <% }); %>
+        </div>
+      </div>
+    </section>
+    <% } %>
+  </main>
+
+  <!-- ---------------- FOOTER / KONTAKT ---------------- -->
+  <footer class="footer" id="kontakt">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <h3>Dřevěný muž</h3>
+          <p>Triatlon Spolku Dřevěného muže — sport, příroda a&nbsp;parta lidí
+            v&nbsp;Lukách nad&nbsp;Jihlavou na&nbsp;Vysočině.</p>
+        </div>
+        <div class="foot-col">
+          <h5>Závod</h5>
+          <a href="#informace">Informace</a>
+          <a href="#trat">Trať</a>
+          <a href="#registrace">Registrace</a>
+          <a href="#fotogalerie">Fotogalerie</a>
+        </div>
+        <div class="foot-col">
+          <h5>Kontakt</h5>
+          <p>Spolek Dřevěného muže</p>
+          <a href="mailto:spolekdrevenehomuze@seznam.cz">spolekdrevenehomuze@seznam.cz</a>
+          <a href="https://www.facebook.com/profile.php?id=61556679761214" target="_blank" rel="noopener">Facebook</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© <%= RACE.year %> Spolek Dřevěného muže</span>
+        <span>Triatlon · <% if (RACE.isPast) { %><%= RACE.futureDate %><% } else { %><%= RACE.numeric %> · <%= RACE.time %><% } %></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- lightbox lives at body level so it stacks above the fixed nav -->
+  <div class="lightbox">
+    <img class="lb-img" src="" alt="">
+    <button class="lb-btn lb-close"><%- icon('close', 22) %></button>
+    <button class="lb-btn lb-prev"><%- icon('chevL', 22) %></button>
+    <button class="lb-btn lb-next"><%- icon('chevR', 22) %></button>
+    <div class="lb-count"></div>
+  </div>
+
+  <script>window.RACE_DATE = "<%= RACE.isoLocal %>";</script>
+  <script src="/js/drevenymuz.js"></script>
+</body>
+</html>

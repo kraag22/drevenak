@@ -18,13 +18,6 @@
         <nav>
             <ul>
                 <li><a href="/">Domu</a></li>
-
-                <% if (typeof events !== 'undefined' && events) { %>
-                    <% events.forEach(event=> { %>
-                        <li><a href="/events/<%= event.slug %>"><%= event.name %> <%= event.eventDate ? `(${new Date(event.eventDate).getDate()}.${new Date(event.eventDate).getMonth() + 1}.${new Date(event.eventDate).getFullYear()})` : '' %></a></li>
-                    <% }); %>
-                <% } %>
-
                 <li><a href="/sponzori">Sponzoři</a></li>
                 <li><a href="/kontakt">Kontakt</a></li>
                 <% if (isAuthenticated) { %>

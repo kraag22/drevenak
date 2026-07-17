@@ -424,13 +424,23 @@
 
     <!-- ---------------- SPONZOŘI (loaded from /images/sponzori) ---------------- -->
     <% const SPONSORS = (typeof sponsors !== 'undefined' && sponsors) ? sponsors : []; %>
-    <% if (SPONSORS.length) { %>
+    <% const GENERAL_SPONSOR = (typeof generalSponsor !== 'undefined') ? generalSponsor : null; %>
+    <% if (GENERAL_SPONSOR || SPONSORS.length) { %>
     <section class="section section--alt" id="sponzori">
       <div class="wrap">
         <div class="sec-head reveal">
           <span class="kicker">— Sponzoři</span>
           <h2 class="title">Naši <span class="accent">sponzoři</span></h2>
         </div>
+        <% if (GENERAL_SPONSOR) { %>
+          <div class="general-sponsor reveal">
+            <span class="general-sponsor__label">Generální sponzor</span>
+            <a class="general-sponsor__link" href="https://www.at-ambulance.cz/" target="_blank" rel="noopener noreferrer">
+              <img src="<%= GENERAL_SPONSOR.thumb %>" alt="Adikta – generální sponzor" loading="lazy">
+            </a>
+          </div>
+        <% } %>
+        <% if (SPONSORS.length) { %>
         <div class="sponsor-grid reveal">
           <% SPONSORS.forEach(s => { %>
             <div class="sponsor-item">
@@ -438,6 +448,7 @@
             </div>
           <% }); %>
         </div>
+        <% } %>
       </div>
     </section>
     <% } %>

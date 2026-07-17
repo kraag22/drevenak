@@ -81,13 +81,23 @@ async function loadGallery() {
   }));
 }
 
-const loadSponsors = () => loadImages('sponzori');
+async function loadSponsors() {
+  const sponsors = await loadImages('sponzori');
+  const generalSponsor = sponsors.find((sponsor) =>
+    path.basename(sponsor.full).toLowerCase().includes('generalni_sponzor_adikta')
+  );
+
+  return {
+    generalSponsor,
+    sponsors: sponsors.filter((sponsor) => sponsor !== generalSponsor),
+  };
+}
 
 // Homepage: the "Dřevěný muž" single-page landing (see views/events/drevenymuz.ejs).
 exports.renderHome = async (req, res, next) => {
   try {
-    const [gallery, sponsors] = await Promise.all([loadGallery(), loadSponsors()]);
-    res.render('events/drevenymuz', { gallery, sponsors, raceDate: RACE_DATE });
+    const [gallery, sponsorData] = await Promise.all([loadGallery(), loadSponsors()]);
+    res.render('events/drevenymuz', { gallery, ...sponsorData, raceDate: RACE_DATE });
   } catch (error) {
     next(error);
   }

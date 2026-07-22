@@ -161,7 +161,7 @@
 
     // Each grid is its own lightbox group; prev/next stays within the group.
     document.querySelectorAll(".gallery, .sponsor-grid").forEach((group) => {
-      const items = Array.from(group.querySelectorAll(".gitem, .sponsor-item"));
+      const items = Array.from(group.querySelectorAll(".gitem, .sponsor-item:not([href])"));
       const groupSources = items.map((el) => {
         const img = el.querySelector("img");
         // Show the full-size image in the lightbox, not the thumbnail.

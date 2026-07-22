@@ -593,6 +593,9 @@ html.armed .reveal.in { opacity: 1; transform: none; }
 /* ---------------- PARTNEŘI ---------------- */
 .partners { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .partner { display: flex; gap: 24px; align-items: center; padding: 28px; }
+.partner { transition: border-color .2s, transform .2s; }
+.partner:hover { border-color: var(--accent); transform: translateY(-2px); }
+.partner:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .partner .logo { flex: none; width: 110px; height: 110px; display: grid; place-items: center; background: var(--bg-1); border: 1px solid var(--line-soft); border-radius: var(--r); overflow: hidden; }
 .partner .logo img { max-width: 86%; max-height: 86%; object-fit: contain; }
 .partner .txt h4 { font-family: var(--f-display); text-transform: uppercase; letter-spacing: 0.05em; font-size: 1.1rem; margin-bottom: 8px; }

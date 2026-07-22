@@ -402,22 +402,22 @@
           <h2 class="title">Díky za <span class="accent">podporu</span></h2>
         </div>
         <div class="partners reveal">
-          <div class="card partner">
+          <a class="card partner" href="https://www.lukanadjihlavou.cz/" target="_blank" rel="noopener noreferrer">
             <div class="logo"><img src="/images/dm/logoLuka.jpeg" alt="Městys Luka nad Jihlavou"></div>
             <div class="txt">
               <h4>Městys Luka nad Jihlavou</h4>
               <p>Tento projekt vznikl s&nbsp;podporou městyse Luka nad&nbsp;Jihlavou. Děkujeme za&nbsp;finanční
                 a&nbsp;institucionální podporu, která přispěla k&nbsp;rozvoji sportovního života v&nbsp;regionu.</p>
             </div>
-          </div>
-          <div class="card partner">
+          </a>
+          <a class="card partner" href="https://www.kr-vysocina.cz/" target="_blank" rel="noopener noreferrer">
             <div class="logo"><img src="/images/dm/logoVysocina.jpeg" alt="Kraj Vysočina"></div>
             <div class="txt">
               <h4>Kraj Vysočina</h4>
               <p>Akci finančně podpořil Kraj&nbsp;Vysočina v&nbsp;rámci podpory regionálních sportovních
                 a&nbsp;volnočasových aktivit.</p>
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </section>
@@ -443,9 +443,15 @@
         <% if (SPONSORS.length) { %>
         <div class="sponsor-grid reveal">
           <% SPONSORS.forEach(s => { %>
+            <% if (s.url) { %>
+            <a class="sponsor-item" href="<%= s.url %>" target="_blank" rel="noopener noreferrer" aria-label="Navštívit web: <%= s.cap %>">
+              <img src="<%= s.thumb %>" alt="<%= s.cap %>" loading="lazy">
+            </a>
+            <% } else { %>
             <div class="sponsor-item">
               <img src="<%= s.thumb %>" data-full="<%= s.full %>" alt="<%= s.cap %>" loading="lazy">
             </div>
+            <% } %>
           <% }); %>
         </div>
         <% } %>

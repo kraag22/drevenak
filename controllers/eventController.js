@@ -14,6 +14,15 @@ const GALLERY_TILE_PATTERN = ['g-w8', 'g-w4', 'g-tall', 'g-sq', 'g-sq', 'g-w4', 
 const IMAGE_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp']);
 const THUMB_PREFIX = 'thumb_';
 const THUMB_WIDTH = 600; // px — downscaled width for grid thumbnails
+const SPONSOR_LINKS = {
+  'kovo.png': 'https://www.konsorcium-kovo.cz/',
+  'Schaltplan4-10.jpg': 'https://www.drevocentrum.cz/',
+  'COMON.jpg': 'https://sklenarstvi.cz/',
+  'fokus-optik 3.jpg': 'https://fokusoptik.cz/',
+  'Schaltplan2-10.jpeg': 'https://www.bucherunipektin.com/cz/bucher-denwel',
+  'fox.jpeg': 'https://www.ufoxe.cz/',
+  'Schaltplan9-10.jpeg': 'https://www.pivovarhorac.cz/',
+};
 
 // Returns the thumbnail filename for an image, generating thumb_<name>.jpg
 // (small JPEG, ~50–100 KB) if it doesn't exist yet. Transparency is flattened
@@ -89,7 +98,12 @@ async function loadSponsors() {
 
   return {
     generalSponsor,
-    sponsors: sponsors.filter((sponsor) => sponsor !== generalSponsor),
+    sponsors: sponsors
+      .filter((sponsor) => sponsor !== generalSponsor)
+      .map((sponsor) => ({
+        ...sponsor,
+        url: SPONSOR_LINKS[path.basename(sponsor.full)] || null,
+      })),
   };
 }
 

@@ -92,8 +92,22 @@
     dlouha: { swim: { dist: 500, unit: "m", laps: "1 okruh" }, bike: { dist: 24, unit: "km", laps: "2 okruhy" }, run: { dist: 5, unit: "km", laps: "2 okruhy" } },
     olympijska: { swim: { dist: 1500, unit: "m", laps: "3 okruhy" }, bike: { dist: 36, unit: "km", laps: "3 okruhy" }, run: { dist: 10, unit: "km", laps: "4 okruhy" } },
   };
+  const SWIM_MAPS = {
+    kratka: "/images/mapa250.jpeg",
+    dlouha: "/images/mapa500.jpeg",
+    olympijska: "/images/mapa1500.jpeg",
+  };
   const tabs = document.querySelectorAll(".course-tab");
   const discs = document.querySelectorAll(".disc[data-disc]");
+  const mapImg = document.getElementById("trat-map-img");
+  const mapCap = document.getElementById("trat-map-cap");
+  const selectDisc = (disc) => {
+    discs.forEach((d) => d.classList.toggle("disc-active", d === disc));
+    if (!mapImg) return;
+    mapImg.src = disc.dataset.img;
+    mapImg.alt = disc.querySelector("h3").textContent;
+    if (mapCap) mapCap.innerHTML = disc.dataset.cap;
+  };
   function setCourse(key) {
     tabs.forEach((t) => t.classList.toggle("active", t.dataset.course === key));
     const c = COURSES[key];
@@ -107,19 +121,16 @@
       distEl.classList.add("disc-flip");
       disc.querySelector(".laps").textContent = d.laps;
     });
+    const swimDisc = document.querySelector('.disc[data-disc="swim"]');
+    if (swimDisc && SWIM_MAPS[key]) {
+      swimDisc.dataset.img = SWIM_MAPS[key];
+      selectDisc(swimDisc);
+    }
   }
   tabs.forEach((t) => t.addEventListener("click", () => setCourse(t.dataset.course)));
 
   // ---------------- TRAŤ: discipline blocks swap the map image ----------------
-  const mapImg = document.getElementById("trat-map-img");
-  const mapCap = document.getElementById("trat-map-cap");
   if (mapImg && discs.length) {
-    const selectDisc = (disc) => {
-      discs.forEach((d) => d.classList.toggle("disc-active", d === disc));
-      mapImg.src = disc.dataset.img;
-      mapImg.alt = disc.querySelector("h3").textContent;
-      if (mapCap) mapCap.innerHTML = disc.dataset.cap;
-    };
     discs.forEach((disc) => {
       disc.addEventListener("click", () => selectDisc(disc));
       disc.addEventListener("keydown", (e) => {

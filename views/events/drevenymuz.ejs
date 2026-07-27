@@ -39,7 +39,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=Barlow:wght@400;500;600;700&family=Oswald:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/drevenymuz.css">
+  <%# bump ?v= after editing drevenymuz.css/.js so browsers drop the cached copy %>
+  <link rel="stylesheet" href="/css/drevenymuz.css?v=3">
 
   <% if (process.env.NODE_ENV === 'production') { %>
     <script defer data-domain="drevenak-luka.cz" src="https://plausible.kraag22.com/js/plausible.js"></script>
@@ -259,6 +260,9 @@
             </button>
           <% }); %>
         </div>
+
+        <%# shown only for the "dlouha" course — toggled in drevenymuz.js %>
+        <p class="course-note show" id="trat-course-note">Dlouhá trať je zařazena do <b>Poháru běžce Vysočiny</b></p>
 
         <div class="disc-grid reveal">
           <% DISCIPLINES.forEach((d, i) => { %>
@@ -500,6 +504,6 @@
   </div>
 
   <script>window.RACE_DATE = "<%= RACE.isoLocal %>";</script>
-  <script src="/js/drevenymuz.js"></script>
+  <script src="/js/drevenymuz.js?v=3"></script>
 </body>
 </html>

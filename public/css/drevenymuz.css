@@ -458,6 +458,10 @@ html.armed .reveal.in { opacity: 1; transform: none; }
 .course-tab:hover { border-color: var(--accent); color: var(--ink); }
 .course-tab.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .course-tab.active .tag { color: var(--accent-ink); opacity: 0.75; }
+/* negative top margin pulls the note up to the tabs; when hidden the tabs keep their own 38px gap */
+.course-note { display: none; margin: -22px 0 32px; font-family: var(--f-mono); font-size: 0.76rem; letter-spacing: 0.04em; color: var(--muted); }
+.course-note.show { display: block; }
+.course-note b { color: var(--accent); }
 
 .disc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .disc {
@@ -650,6 +654,7 @@ html.armed .reveal.in { opacity: 1; transform: none; }
   .course-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 24px; }
   .course-tab { flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 10px 6px; font-size: 0.82rem; letter-spacing: 0.02em; text-align: center; }
   .course-tab .tag { font-size: 0.56rem; letter-spacing: 0.04em; }
+  .course-note { margin: -14px 0 20px; font-size: 0.68rem; line-height: 1.45; }
   .map-frame { border: 0; border-radius: 0; overflow: visible; }
   .map-frame .cap { position: static; margin-bottom: 10px; padding: 0; background: none; backdrop-filter: none; border: 0; border-radius: 0; font-size: 0.7rem; line-height: 1.45; }
   .map-frame img { border: 1px solid var(--line-soft); border-radius: var(--r-lg); }

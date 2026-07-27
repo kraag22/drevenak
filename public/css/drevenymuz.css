@@ -425,6 +425,8 @@ html.armed .reveal.in { opacity: 1; transform: none; }
 .info-grid p + p { margin-top: 16px; }
 .info-grid .body { color: var(--ink-dim); font-size: 1.08rem; }
 .linkrow { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
+/* in the two-column info grid the links are their own cell, aligned with the text */
+@media (min-width: 901px) { .info-grid > .linkrow { margin-top: 0; } }
 .linkrow a {
   display: flex; align-items: center; justify-content: space-between;
   padding: 16px 20px; border: 1px solid var(--line-soft); border-radius: var(--r);
@@ -448,6 +450,21 @@ html.armed .reveal.in { opacity: 1; transform: none; }
 .kat.group { color: var(--accent); border-color: color-mix(in oklab, var(--accent) 50%, var(--line)); }
 
 /* ---------------- TRAŤ ---------------- */
+/* Kategorie is last in the markup so phones get it after the map; from 901px up
+   the grid lifts it into a right-hand column next to the section headline. */
+.trat-layout .kat-panel { margin-top: 30px; }
+@media (min-width: 901px) {
+  /* Two columns for the headline + course picker only; the discipline cards and
+     the map stay full width underneath, so the panel never narrows them. */
+  .trat-layout { display: grid; grid-template-columns: minmax(0, 1fr) clamp(330px, 26vw, 360px); column-gap: clamp(28px, 4vw, 56px); align-items: start; }
+  .trat-layout .sec-head { grid-column: 1; grid-row: 1; }
+  .trat-layout .trat-picker { grid-column: 1; grid-row: 2; }
+  /* margin-bottom keeps the panel clear of the discipline cards in the row below */
+  .trat-layout .kat-panel { grid-column: 2; grid-row: 1 / span 2; margin: 0 0 40px; padding: 24px; }
+  .trat-layout .trat-main { grid-column: 1 / -1; grid-row: 3; }
+  /* chips pack two per row here, keeping the panel as short as the rows it spans */
+  .trat-layout .kat { font-size: 0.74rem; padding: 7px 11px; }
+}
 .course-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 38px; }
 .course-tab {
   font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;

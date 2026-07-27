@@ -40,7 +40,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=Barlow:wght@400;500;600;700&family=Oswald:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <%# bump ?v= after editing drevenymuz.css/.js so browsers drop the cached copy %>
-  <link rel="stylesheet" href="/css/drevenymuz.css?v=3">
+  <link rel="stylesheet" href="/css/drevenymuz.css?v=8">
 
   <% if (process.env.NODE_ENV === 'production') { %>
     <script defer data-domain="drevenak-luka.cz" src="https://plausible.kraag22.com/js/plausible.js"></script>
@@ -87,16 +87,22 @@
     { key: "bike", name: "Kolo", bg: "/images/dm/figBike.jpeg", map: "/images/bike.jpeg", num: "02", dist: 24, unit: "km", laps: "2 okruhy", cap: "Kolo — okruhová trať kolem <b>Luk nad Jihlavou</b>" },
     { key: "run", name: "Běh", bg: "/images/dm/figRun.jpeg", map: "/images/run.jpeg", num: "03", dist: 5, unit: "km", laps: "2 okruhy", cap: "Běh — závěrečný běžecký <b>okruh u&nbsp;přehrady</b>" },
   ];
-  const CATEGORIES = [
-    { label: "Muži do 19 let" },
-    { label: "Muži 20–39 let" },
-    { label: "Muži 40–49 let" },
-    { label: "Muži 50–59 let" },
-    { label: "Muži nad 60 let" },
-    { label: "Ženy do 39 let" },
-    { label: "Ženy nad 40 let" },
-    { label: "Štafety" },
-  ];
+  // Categories per course — only "dlouha" races the full age brackets.
+  // Handed to the client below so the panel can follow the course tabs.
+  const CATEGORY_SETS = {
+    kratka: ["Ženy", "Muži", "Štafety"],
+    dlouha: [
+      "Muži do 19 let",
+      "Muži 20–39 let",
+      "Muži 40–49 let",
+      "Muži 50–59 let",
+      "Muži nad 60 let",
+      "Ženy do 39 let",
+      "Ženy nad 40 let",
+      "Štafety",
+    ],
+    olympijska: ["Ženy", "Muži", "Štafety"],
+  };
   // Gallery images are loaded from public/images/gallery (ordered by date)
   // and passed in by the controller.
   const GALLERY = (typeof gallery !== 'undefined' && gallery) ? gallery : [];
@@ -219,21 +225,12 @@
               Přijďte si zasportovat, pobavit se a&nbsp;potkat skvělé lidi — ať už útočíte na&nbsp;olympijskou
               trať, nebo si jdete poprvé zkusit kratší okruh.
             </p>
-            <div class="linkrow">
-              <a href="https://ptime.cz/data/vysledky_pdf/560/vysledky.pdf" target="_blank" rel="noopener">Výsledky 2025 <%- icon('trophy', 20, { className: 'arrow' }) %></a>
-              <a href="https://spolekdrevenehomuze.rajce.idnes.cz/" target="_blank" rel="noopener">Fotky na rajce.cz <%- icon('camera', 20, { className: 'arrow' }) %></a>
-            </div>
           </div>
 
-          <div class="card kat-panel reveal">
-            <h3>Kategorie</h3>
-            <p class="note">Závodí se v&nbsp;mužských i&nbsp;ženských věkových kategoriích a&nbsp;ve štafetách.</p>
-            <div class="kat-list">
-              <% CATEGORIES.forEach(k => { %>
-                <span class="kat"><%= k.label %></span>
-              <% }); %>
-            </div>
-            <p class="kat-note">U&nbsp;mladších 18&nbsp;let je nutný písemný souhlas rodiče.</p>
+          <%# own grid cell so it fills the right-hand column on wide screens %>
+          <div class="linkrow reveal">
+            <a href="https://ptime.cz/data/vysledky_pdf/560/vysledky.pdf" target="_blank" rel="noopener">Výsledky 2025 <%- icon('trophy', 20, { className: 'arrow' }) %></a>
+            <a href="https://spolekdrevenehomuze.rajce.idnes.cz/" target="_blank" rel="noopener">Fotky na rajce.cz <%- icon('camera', 20, { className: 'arrow' }) %></a>
           </div>
         </div>
       </div>
@@ -241,7 +238,7 @@
 
     <!-- ---------------- TRAŤ ---------------- -->
     <section class="section section--alt" id="trat">
-      <div class="wrap">
+      <div class="wrap trat-layout">
         <div class="sec-head reveal">
           <div class="row">
             <div>
@@ -253,6 +250,7 @@
           </div>
         </div>
 
+        <div class="trat-picker">
         <div class="course-tabs reveal">
           <% COURSE_ORDER.forEach(key => { %>
             <button class="course-tab<%= key === 'dlouha' ? ' active' : '' %>" data-course="<%= key %>">
@@ -263,7 +261,9 @@
 
         <%# shown only for the "dlouha" course — toggled in drevenymuz.js %>
         <p class="course-note show" id="trat-course-note">Dlouhá trať je zařazena do <b>Poháru běžce Vysočiny</b></p>
+        </div><%# /.trat-picker %>
 
+        <div class="trat-main">
         <div class="disc-grid reveal">
           <% DISCIPLINES.forEach((d, i) => { %>
             <div class="disc<%= i === 0 ? ' disc-active' : '' %>" data-disc="<%= d.key %>" data-img="<%= d.map %>" data-cap="<%= d.cap %>" role="button" tabindex="0" aria-label="Zobrazit mapu: <%= d.name %>">
@@ -284,6 +284,19 @@
             <div class="cap" id="trat-map-cap">Plavání — jezero <b>Loudilka</b></div>
             <img id="trat-map-img" src="/images/mapa500.jpeg" alt="Plavání">
           </div>
+        </div>
+        </div><%# /.trat-main %>
+
+        <%# grid puts this beside the headline on laptops; on phones document order leaves it last %>
+        <div class="card kat-panel reveal">
+          <h3>Kategorie</h3>
+          <p class="note">Závodí se v&nbsp;mužských i&nbsp;ženských věkových kategoriích a&nbsp;ve štafetách.</p>
+          <div class="kat-list" id="kat-list">
+            <% CATEGORY_SETS.dlouha.forEach(label => { %>
+              <span class="kat"><%= label %></span>
+            <% }); %>
+          </div>
+          <p class="kat-note">U&nbsp;mladších 18&nbsp;let je nutný písemný souhlas rodiče.</p>
         </div>
       </div>
     </section>
@@ -503,7 +516,10 @@
     <div class="lb-count"></div>
   </div>
 
-  <script>window.RACE_DATE = "<%= RACE.isoLocal %>";</script>
-  <script src="/js/drevenymuz.js?v=3"></script>
+  <script>
+    window.RACE_DATE = "<%= RACE.isoLocal %>";
+    window.CATEGORY_SETS = <%- JSON.stringify(CATEGORY_SETS) %>;
+  </script>
+  <script src="/js/drevenymuz.js?v=8"></script>
 </body>
 </html>

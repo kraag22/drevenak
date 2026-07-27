@@ -102,6 +102,8 @@
   const mapImg = document.getElementById("trat-map-img");
   const mapCap = document.getElementById("trat-map-cap");
   const courseNote = document.getElementById("trat-course-note");
+  const katList = document.getElementById("kat-list");
+  const CATEGORY_SETS = window.CATEGORY_SETS || {};
   const selectDisc = (disc) => {
     discs.forEach((d) => d.classList.toggle("disc-active", d === disc));
     if (!mapImg) return;
@@ -112,6 +114,11 @@
   function setCourse(key) {
     tabs.forEach((t) => t.classList.toggle("active", t.dataset.course === key));
     if (courseNote) courseNote.classList.toggle("show", key === "dlouha");
+    if (katList && CATEGORY_SETS[key]) {
+      katList.innerHTML = CATEGORY_SETS[key]
+        .map((label) => '<span class="kat">' + label + "</span>")
+        .join("");
+    }
     const c = COURSES[key];
     discs.forEach((disc) => {
       const d = c[disc.dataset.disc];

@@ -641,7 +641,27 @@ html.armed .reveal.in { opacity: 1; transform: none; }
   .g-sq, .g-w4 { grid-column: span 6; }
 }
 @media (max-width: 560px) {
-  .facts { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: 1fr 1fr; }
+  .fact { padding: 16px 14px; }
+  .fact .ic { margin-bottom: 8px; }
+  .fact .ic svg { width: 18px; height: 18px; }
+  .fact .v { font-size: 1.05rem; }
+  .fact .k { font-size: 0.58rem; letter-spacing: 0.1em; margin-top: 5px; }
+  .course-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 24px; }
+  .course-tab { flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 10px 6px; font-size: 0.82rem; letter-spacing: 0.02em; text-align: center; }
+  .course-tab .tag { font-size: 0.56rem; letter-spacing: 0.04em; }
+  .map-frame { border: 0; border-radius: 0; overflow: visible; }
+  .map-frame .cap { position: static; margin-bottom: 10px; padding: 0; background: none; backdrop-filter: none; border: 0; border-radius: 0; font-size: 0.7rem; line-height: 1.45; }
+  .map-frame img { border: 1px solid var(--line-soft); border-radius: var(--r-lg); }
+  .disc-grid { gap: 12px; }
+  .disc { min-height: 104px; }
+  .disc .num { top: 10px; left: 14px; font-size: 0.6rem; }
+  .disc .veil { background: linear-gradient(to top, color-mix(in oklab, var(--bg-0) 96%, transparent) 15%, color-mix(in oklab, var(--bg-0) 74%, transparent) 65%, color-mix(in oklab, var(--bg-0) 48%, transparent) 100%); }
+  .disc .body { padding: 14px 16px; display: grid; grid-template-columns: 1fr auto; column-gap: 12px; align-items: end; }
+  .disc h3 { font-size: 1.2rem; }
+  .disc .dist { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-size: 1.9rem; margin: 0; }
+  .disc .dist .u { font-size: 0.85rem; }
+  .disc .laps { font-size: 0.66rem; margin-top: 4px; }
   .field-row { grid-template-columns: 1fr; }
   .partner { flex-direction: column; text-align: center; }
   .gallery { grid-template-columns: repeat(6,1fr); }

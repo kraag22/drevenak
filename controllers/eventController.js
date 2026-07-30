@@ -22,6 +22,7 @@ const SPONSOR_LINKS = {
   'Schaltplan2-10.jpeg': 'https://www.bucherunipektin.com/cz/bucher-denwel',
   'fox.jpeg': 'https://www.ufoxe.cz/',
   'Schaltplan9-10.jpeg': 'https://www.pivovarhorac.cz/',
+  'medaoli.png': 'https://www.medaoli.cz/',
 };
 
 // Returns the thumbnail filename for an image, generating thumb_<name>.jpg
